@@ -21,7 +21,7 @@ class User(UserMixin, db.Model):
         self, email, password, is_admin=False, is_confirmed=False, confirmed_on=None
     ):
         self.email = email
-        self.password = bcrypt.generate_password_hash(password)
+        self.password = bcrypt.generate_password_hash(password, rounds=10)
         self.created_on = datetime.now()
         self.is_admin = is_admin
         self.is_confirmed = is_confirmed
