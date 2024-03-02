@@ -8,10 +8,10 @@ import getpass
 from datetime import datetime
 
 
-cli = FlaskGroup(app)
+app = FlaskGroup(app)
 
 
-@cli.command("test")
+@app.command("test")
 def test():
     tests = unittest.TestLoader().discover("tests")
     result = unittest.TextTestRunner(verbosity=2).run(tests)
@@ -21,7 +21,7 @@ def test():
         return 1
 
 
-@cli.command("create_admin")
+@app.command("create_admin")
 def create_admin():
     email = input("Enter email address: ")
     password = getpass.getpass("Enter password: ")
@@ -40,9 +40,10 @@ def create_admin():
             db.session.add(user)
             db.session.commit()
             print(f"Admin with email {email} created successfully!")
-        except Exception:
+        except Exception as e:
             print("Couldn't create admin user.")
+            print(f"Error: {str(e)}")
 
 
 if __name__ == "__main__":
-    cli()
+    app()
