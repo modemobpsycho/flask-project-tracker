@@ -30,6 +30,7 @@ class Config(object):
     MAIL_USERNAME = config("MAIL_USERNAME", default="MAIL_USERNAME")
     MAIL_PASSWORD = config("MAIL_PASSWORD", default="MAIL_PASSWORD")
 
+
 class DevelopmentConfig(Config):
     DEVELOPMENT = True
     DEBUG = True
