@@ -1,7 +1,12 @@
 from flask import Blueprint, render_template, redirect, request, url_for, flash
 from flask_login import login_required, current_user
 from website import app, db
-from website.projects.forms import CreateProjectForm, AddTaskForm, ManageMembersForm
+from website.projects.forms import (
+    CreateProjectForm,
+    AddTaskForm,
+    EditProjectForm,
+    ManageMembersForm,
+)
 from website.projects.models import Project
 
 projects_bp = Blueprint("projects", __name__)
@@ -49,13 +54,16 @@ def edit_project(project_id):
         flash("Project not found", "danger")
         return redirect(url_for("projects.projects"))
 
-    form = CreateProjectForm(obj=project)
+    form = EditProjectForm()
     if form.validate_on_submit():
         form.populate_obj(project)
         db.session.commit()
 
         flash("Project updated successfully", "success")
         return redirect(url_for("projects.project_details", project_id=project_id))
+
+    form.name.data = project.name
+    form.description.data = project.description
 
     return render_template("projects/edit_project.html", project=project, form=form)
 
