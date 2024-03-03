@@ -30,10 +30,6 @@ class Config(object):
     MAIL_USERNAME = config("MAIL_USERNAME", default="MAIL_USERNAME")
     MAIL_PASSWORD = config("MAIL_PASSWORD", default="MAIL_PASSWORD")
 
-    for key, value in os.environ.items():
-        print(f"{key} = {value}")
-
-
 class DevelopmentConfig(Config):
     DEVELOPMENT = True
     DEBUG = True
