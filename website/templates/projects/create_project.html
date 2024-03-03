@@ -1,0 +1,19 @@
+{% extends "_base.html" %} {% block content %}
+<h1>Create Project</h1>
+<form method="POST" action="{{ url_for('projects.create_project') }}">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+        {{ form.name.label }} {{ form.name(class="form-control") }} {% for error
+        in form.name.errors %}
+        <span class="text-danger">{{ error }}</span>
+        {% endfor %}
+    </div>
+    <div class="form-group">
+        {{ form.description.label }} {{ form.description(class="form-control")
+        }} {% for error in form.description.errors %}
+        <span class="text-danger">{{ error }}</span>
+        {% endfor %}
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>
+{% endblock %}
