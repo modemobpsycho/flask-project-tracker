@@ -19,3 +19,8 @@ class ManageMembersForm(FlaskForm):
     email = StringField("Email", validators=[DataRequired(), Email()])
     submit_add = SubmitField("Add Member")
     submit_remove = SubmitField("Remove Member")
+
+
+class EditProjectForm(FlaskForm):
+    name = StringField("Name", validators=[DataRequired()])
+    description = TextAreaField("Description")
