@@ -1,0 +1,40 @@
+{% extends "_base.html" %} {% block css %} {{ super() }}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='styles/styles_profile.css') }}"
+/>
+{% endblock %} {% block content %}
+<div class="container">
+    <div class="profile-card">
+        <div class="card-body">
+            <h1 class="profile-title">Profile</h1>
+
+            {% if profile.photo %}
+            <img
+                class="img-avatar"
+                src="{{ url_for('static', filename='upload_folder/' + profile.photo) }}"
+                alt="Profile Photo"
+            />
+            {% endif %}
+
+            <p class="profile-info">Full Name: {{ profile.full_name }}</p>
+            <p class="profile-info">Age: {{ profile.age }}</p>
+            <p class="bio">Bio: {{ profile.bio }}</p>
+
+            {% if profile.full_name %}
+            <a
+                href="{{ url_for('accounts.edit_profile') }}"
+                class="btn btn-primary btn-edit"
+                >Edit Profile</a
+            >
+            {% else %}
+            <a
+                href="{{ url_for('accounts.create_profile') }}"
+                class="btn btn-primary btn-create-profile"
+                >Create Profile</a
+            >
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

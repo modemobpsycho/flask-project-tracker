@@ -1,0 +1,30 @@
+/* static/styles/home_style.css */
+
+.project-card {
+    transition: box-shadow 0.3s ease;
+    height: 100%;
+}
+
+.project-card:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.card-body {
+    height: 100%;
+}
+
+.card-title {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.card-text {
+    font-size: 16px;
+    margin-bottom: 15px;
+    height: 70px;
+    overflow-y: auto;
+}
+
+.btn-view {
+    margin-top: auto;
+}

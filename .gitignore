@@ -23,6 +23,8 @@ share/python-wheels/
 *.egg
 MANIFEST
 settings.json
+website/static/upload_folder
+website/static/images
 
 *.manifest
 *.spec

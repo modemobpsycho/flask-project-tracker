@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8" />
-        <title>Flask User Management</title>
+        <title>Flask Project Management</title>
         <meta name="description" content="" />
         <meta name="author" content="" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -13,11 +13,17 @@
             crossorigin="anonymous"
         />
         <link
+            rel="shortcut icon"
+            href="{{ url_for('static', filename='/images/favicon.ico') }}"
+            type="image/x-icon"
+        />
+        {% block css %}
+        <link
             rel="stylesheet"
             href='{{url_for("static",
-        filename="styles.css")}}'
+        filename="styles/base_styles.css")}}'
         />
-        {% block css %}{% endblock %}
+        {% endblock %}
     </head>
     <body>
         {% include "navigation.html" %}

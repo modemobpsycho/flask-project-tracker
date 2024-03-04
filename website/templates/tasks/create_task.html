@@ -1,13 +1,39 @@
-{% extends "_base.html" %} {% block content %}
-<h1>Create Task</h1>
-<form
-    method="POST"
-    action="{{ url_for('projects.create_task', project_id=project.id) }}"
->
-    {{ form.hidden_tag() }} {{ form.name.label }} {{ form.name() }} {{
-    form.description.label }} {{ form.description() }} {{ form.status.label }}
-    {{ form.status() }}
-    <input type="hidden" name="project_id" value="{{ project.id }}" />
-    <button type="submit">Create</button>
-</form>
+{% extends "_base.html" %} {% block css %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='styles/create_task.css') }}"
+/>
+{% endblock %} {% block content %}
+<div class="container">
+    <h1 class="mb-4">Create Task</h1>
+    <form
+        method="POST"
+        action="{{ url_for('projects.create_task', project_id=project.id) }}"
+    >
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            <label for="name" class="form-label">Task Name</label>
+            {{ form.name(class="form-control") }} {% for error in
+            form.name.errors %}
+            <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+        <div class="form-group">
+            <label for="description" class="form-label">Task Description</label>
+            {{ form.description(class="form-control") }} {% for error in
+            form.description.errors %}
+            <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+        <div class="form-group">
+            <label for="status" class="form-label">Task Status</label>
+            {{ form.status(class="form-control") }} {% for error in
+            form.status.errors %}
+            <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+        <input type="hidden" name="project_id" value="{{ project.id }}" />
+        <button type="submit" class="btn btn-primary">Create</button>
+    </form>
+</div>
 {% endblock %}

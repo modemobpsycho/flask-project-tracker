@@ -1,5 +1,50 @@
-{% extends "_base.html" %} {% block content %}
-
-<h1 class="text-center">Welcome {{current_user.email}}!</h1>
-
+{% extends "_base.html" %} {% block css %} {{ super() }}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='styles/home_style.css') }}"
+/>
+{% endblock %} {% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <div class="text-center mb-3">
+                <h1>Welcome, {{ current_user.email }}!</h1>
+                <p class="lead">Thank you for being part of our community.</p>
+            </div>
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Latest Updates</h5>
+                    <p class="card-text">
+                        Check out the latest news and updates from our platform.
+                    </p>
+                    <a href="#" class="btn btn-primary">Read More</a>
+                </div>
+            </div>
+            <div class="mt-4">
+                <h2 class="text-center">Featured Projects</h2>
+                <div class="row">
+                    {% for project in projects %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card project-card">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">{{ project.name }}</h5>
+                                <p class="card-text">
+                                    {{ project.description }}
+                                </p>
+                                <div class="mt-auto">
+                                    <a
+                                        href="{{ url_for('projects.project_details', project_id=project.id) }}"
+                                        class="btn btn-md btn-outline-primary"
+                                        >View</a
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

@@ -1,22 +1,33 @@
-{% extends "_base.html" %} {% block content %}
-<h1>Edit Project</h1>
-<form
-    method="POST"
-    action="{{ url_for('projects.edit_project', project_id=project.id) }}"
->
-    {{ form.hidden_tag() }}
-    <div class="form-group">
-        {{ form.name.label }} {{ form.name(class="form-control") }} {% for error
-        in form.name.errors %}
-        <span class="text-danger">{{ error }}</span>
-        {% endfor %}
-    </div>
-    <div class="form-group">
-        {{ form.description.label }} {{ form.description(class="form-control")
-        }} {% for error in form.description.errors %}
-        <span class="text-danger">{{ error }}</span>
-        {% endfor %}
-    </div>
-    <button type="submit" class="btn btn-primary">Update</button>
-</form>
+{% extends "_base.html" %} {% block css %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='styles/edit_project.css') }}"
+/>
+{% endblock %} {% block content %}
+<div class="container">
+    <h1 class="mb-4">Edit Project</h1>
+    <form
+        method="POST"
+        action="{{ url_for('projects.edit_project', project_id=project.id) }}"
+    >
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            <label for="name" class="form-label">Project Name</label>
+            {{ form.name(class="form-control") }} {% for error in
+            form.name.errors %}
+            <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+        <div class="form-group">
+            <label for="description" class="form-label"
+                >Project Description</label
+            >
+            {{ form.description(class="form-control") }} {% for error in
+            form.description.errors %}
+            <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+        <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+</div>
 {% endblock %}

@@ -1,0 +1,76 @@
+/* static/styles/edit_profile.css */
+
+form {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+h1 {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.btn-primary {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: #006ee4;
+    color: #fff;
+    cursor: pointer;
+    margin: 0 auto;
+}
+
+.btn-danger {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: #e20000;
+    color: #fff;
+    cursor: pointer;
+    margin: 0 auto;
+}
+
+.btn-primary:hover {
+    background-color: #00438b;
+}
+
+.btn-danger:hover {
+    background-color: #600000;
+}
+
+.img-avatar {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    border: 2px solid rgba(0, 0, 0, 0.5);
+    padding: 5px;
+    color: white;
+    display: flex;
+}
+#delete-photo-btn {
+    margin-top: 10px;
+}
