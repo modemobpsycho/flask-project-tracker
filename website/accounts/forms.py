@@ -1,7 +1,15 @@
 from flask_wtf import FlaskForm
-from wtforms import EmailField, PasswordField
+from wtforms import (
+    BooleanField,
+    EmailField,
+    FileField,
+    IntegerField,
+    PasswordField,
+    StringField,
+    TextAreaField,
+)
 from wtforms.validators import DataRequired, Email, EqualTo, Length
-
+from flask_wtf.file import FileAllowed, FileRequired
 from website.accounts.models import User
 
 
@@ -37,3 +45,13 @@ class RegisterForm(FlaskForm):
             self.password.errors.append("Passwords must match")
             return False
         return True
+
+
+class ProfileForm(FlaskForm):
+    full_name = StringField("Full Name", validators=[DataRequired(), Length(max=255)])
+    age = IntegerField("Age", validators=[DataRequired()])
+    bio = TextAreaField("Bio")
+    profile_photo = FileField(
+        "Profile Photo", validators=[FileAllowed(["jpg", "png"], "Images only!")]
+    )
+    delete_profile_photo = BooleanField("Delete Profile Photo")

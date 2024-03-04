@@ -1,0 +1,74 @@
+{% extends "_base.html" %} {% block css %} {{ super() }}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='styles/edit_profile.css') }}"
+/>
+{% endblock %} {% block content %}
+<h1>Edit Profile</h1>
+<form
+    method="POST"
+    action="{{ url_for('accounts.edit_profile') }}"
+    enctype="multipart/form-data"
+>
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+        {{ form.full_name.label }} {{ form.full_name(class="form-control") }} {%
+        for error in form.full_name.errors %}
+        <span class="text-danger">{{ error }}</span>
+        {% endfor %}
+    </div>
+    <div class="form-group">
+        {{ form.age.label }} {{ form.age(class="form-control") }} {% for error
+        in form.age.errors %}
+        <span class="text-danger">{{ error }}</span>
+        {% endfor %}
+    </div>
+    <div class="form-group">
+        {{ form.bio.label }} {{ form.bio(class="form-control") }} {% for error
+        in form.bio.errors %}
+        <span class="text-danger">{{ error }}</span>
+        {% endfor %}
+    </div>
+    <div class="form-group">
+        {{ form.profile_photo.label }} {{
+        form.profile_photo(class="form-control-file") }} {% for error in
+        form.profile_photo.errors %}
+        <span class="text-danger">{{ error }}</span>
+        {% endfor %}
+    </div>
+    {% if profile.photo %}
+    <div class="form-group">
+        <img
+            class="img-avatar"
+            src="{{ url_for('static', filename='upload_folder/' + profile.photo) }}"
+            alt="Profile Photo"
+        />
+    </div>
+    <div class="form-group">
+        <button type="button" class="btn btn-danger" id="delete-photo-btn">
+            Delete Profile Photo
+        </button>
+    </div>
+    {% endif %}
+    <button type="submit" class="btn btn-primary">Update</button>
+</form>
+
+<form
+    id="delete-photo-form"
+    action="{{ url_for('accounts.delete_profile_photo') }}"
+    method="POST"
+    style="display: none"
+>
+    {{ form.hidden_tag() }}
+    <button type="submit" class="btn btn-danger">Confirm Delete</button>
+</form>
+
+<script>
+    document
+        .getElementById("delete-photo-btn")
+        .addEventListener("click", function () {
+            document.getElementById("delete-photo-form").style.display =
+                "block";
+        });
+</script>
+{% endblock %}

@@ -1,0 +1,68 @@
+/* static/styles/styles_profile.css */
+
+.profile-card {
+    width: 90%;
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+    overflow: hidden;
+}
+
+.profile-card:hover {
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+}
+
+.img-avatar {
+    width: 300px;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin: 20px auto;
+    box-shadow: 0 0 10px rgba(73, 61, 61, 0.5);
+    border: 2px solid rgba(0, 0, 0, 0.5);
+    padding: 5px;
+    color: white;
+    display: block;
+    margin: 0 auto;
+}
+
+.profile-title {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.profile-info {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.bio {
+    margin-bottom: 20px;
+    word-wrap: break-word;
+}
+
+.btn-edit,
+.btn-create-profile {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: #005362;
+    color: #fff;
+    cursor: pointer;
+}
+
+.btn-create-profile {
+    margin-top: 20px;
+}
+
+.btn-primary:hover {
+    background-color: #343434;
+}

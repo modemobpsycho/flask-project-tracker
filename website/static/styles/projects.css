@@ -1,0 +1,44 @@
+.card {
+    transition: box-shadow 0.3s ease;
+    box-shadow: 0 1px 3px #9b9b9b;
+}
+
+.card:hover {
+    box-shadow: 0 4px 10px #4d4d4d;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.card-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.card-text {
+    font-size: 16px;
+    margin-bottom: 15px;
+    height: 140px;
+    overflow-y: auto;
+}
+
+.btn-group {
+    margin-top: auto;
+}
+
+.card-footer {
+    padding: 10px 20px;
+    background-color: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+}
+
+.project-link {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.project-link:hover {
+    color: #0056b3;
+}
