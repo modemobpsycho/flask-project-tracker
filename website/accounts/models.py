@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from flask_login import UserMixin
+from sqlalchemy import false
 
 from website import bcrypt, db
 
@@ -18,7 +19,12 @@ class User(UserMixin, db.Model):
     confirmed_on = db.Column(db.DateTime, nullable=True)
 
     def __init__(
-        self, email, password, is_admin=False, is_confirmed=False, confirmed_on=None
+        self,
+        email,
+        password,
+        is_admin=False,
+        is_confirmed=False,
+        confirmed_on=None,
     ):
         self.email = email
         self.password = bcrypt.generate_password_hash(password, rounds=10)

@@ -22,10 +22,12 @@ migrate = Migrate(app, db)
 from website.accounts.views import accounts_bp
 from website.core.views import core_bp
 from website.projects.views import projects_bp
+from website.tasks.views import tasks_bp
 
 app.register_blueprint(accounts_bp)
 app.register_blueprint(core_bp)
 app.register_blueprint(projects_bp)
+app.register_blueprint(tasks_bp)
 
 from .accounts.models import User
 from .projects.models import Project, Task, ProjectMember, Comment
