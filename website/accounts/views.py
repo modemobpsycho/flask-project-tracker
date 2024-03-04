@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask import Blueprint, app, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 
 from website import bcrypt, db
@@ -18,10 +18,12 @@ accounts_bp = Blueprint("accounts", __name__)
 @logout_required
 def register():
     form = RegisterForm(request.form)
-    if form.validate():
+    if form.validate_on_submit():
         user = User(email=form.email.data, password=form.password.data)
+
         db.session.add(user)
         db.session.commit()
+
         token = generate_token(user.email)
         confirm_url = url_for("accounts.confirm_email", token=token, _external=True)
         html = render_template("accounts/confirm_email.html", confirm_url=confirm_url)
