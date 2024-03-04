@@ -1,15 +1,26 @@
 from datetime import datetime
+import os
 
-from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask import (
+    Blueprint,
+    app,
+    flash,
+    redirect,
+    render_template,
+    request,
+    url_for,
+    current_app,
+)
 from flask_login import current_user, login_required, login_user, logout_user
+from werkzeug.utils import secure_filename
 
 from website import bcrypt, db
-from website.accounts.models import User
+from website.accounts.models import Profile, User
 from website.accounts.token import confirm_token, generate_token
 from website.utils.decorators import logout_required
 from website.utils.email import send_email
 
-from .forms import LoginForm, RegisterForm
+from .forms import LoginForm, ProfileForm, RegisterForm
 
 accounts_bp = Blueprint("accounts", __name__)
 
@@ -18,10 +29,12 @@ accounts_bp = Blueprint("accounts", __name__)
 @logout_required
 def register():
     form = RegisterForm(request.form)
-    if form.validate():
+    if form.validate_on_submit():
         user = User(email=form.email.data, password=form.password.data)
+
         db.session.add(user)
         db.session.commit()
+
         token = generate_token(user.email)
         confirm_url = url_for("accounts.confirm_email", token=token, _external=True)
         html = render_template("accounts/confirm_email.html", confirm_url=confirm_url)
@@ -99,3 +112,73 @@ def resend_confirmation():
     send_email(current_user.email, subject, html)
     flash("A new confirmation email has been sent.", "success")
     return redirect(url_for("accounts.inactive"))
+
+
+@accounts_bp.route("/profile")
+@login_required
+def profile():
+    profile = current_user.profile
+    return render_template("accounts/profile.html", profile=profile)
+
+
+@accounts_bp.route("/profile/create", methods=["GET", "POST"])
+@login_required
+def create_profile():
+    form = ProfileForm()
+    if form.validate_on_submit():
+        profile = Profile(
+            user_id=current_user.id,
+            full_name=form.full_name.data,
+            age=form.age.data,
+            bio=form.bio.data,
+        )
+        if form.profile_photo.data:
+            filename = secure_filename(form.profile_photo.data.filename)
+            form.profile_photo.data.save(
+                os.path.join(current_app.config["UPLOAD_FOLDER"], filename)
+            )
+            profile.photo = filename
+
+        db.session.add(profile)
+        db.session.commit()
+        flash("Profile created successfully", "success")
+        return redirect(url_for("accounts.profile"))
+
+    return render_template("accounts/create_profile.html", form=form)
+
+
+@accounts_bp.route("/profile/edit", methods=["GET", "POST"])
+@login_required
+def edit_profile():
+    profile = current_user.profile
+
+    form = ProfileForm(obj=profile)
+    if form.validate_on_submit():
+        form.populate_obj(profile)
+        if form.profile_photo.data:
+            filename = secure_filename(form.profile_photo.data.filename)
+            form.profile_photo.data.save(
+                os.path.join(current_app.config["UPLOAD_FOLDER"], filename)
+            )
+            profile.photo = filename
+
+        db.session.commit()
+        flash("Profile updated successfully", "success")
+        return redirect(url_for("accounts.profile"))
+
+    return render_template("accounts/edit_profile.html", form=form, profile=profile)
+
+
+@accounts_bp.route("/profile/delete_photo", methods=["POST"])
+@login_required
+def delete_profile_photo():
+    if current_user.profile.photo:
+        os.remove(
+            os.path.join(
+                current_app.config["UPLOAD_FOLDER"], current_user.profile.photo
+            )
+        )
+        current_user.profile.photo = None
+        db.session.commit()
+        flash("Profile photo deleted successfully", "success")
+    return redirect(url_for("accounts.edit_profile"))

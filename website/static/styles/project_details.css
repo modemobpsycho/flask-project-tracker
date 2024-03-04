@@ -1,0 +1,50 @@
+/* static/styles/project_details.css */
+
+.card {
+    margin-top: 20px;
+}
+
+.card-header {
+    background-color: #f8f9fa;
+}
+
+.card-title {
+    color: #1e1e1e;
+}
+
+.project-name {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.project-description {
+    margin-bottom: 20px;
+}
+
+.list-group {
+    margin-top: 20px;
+}
+
+.list-group-item {
+    padding: 20px;
+    margin-bottom: 10px;
+    background-color: #f8f9fa;
+}
+
+.task-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.task-name {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.task-actions {
+    margin-top: 10px;
+}
+
+.btn {
+    margin-right: 10px;
+}

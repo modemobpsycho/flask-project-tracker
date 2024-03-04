@@ -1,0 +1,13 @@
+/* static/styles/create_task.css */
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    font-weight: bold;
+}
+
+.text-danger {
+    color: #dc3545;
+}

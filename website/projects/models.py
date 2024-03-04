@@ -34,9 +34,11 @@ class Task(db.Model):
     status = db.Column(db.String, nullable=False, default="Pending")
     project_id = db.Column(db.Integer, db.ForeignKey("projects.id"), nullable=False)
 
-    def __init__(self, name, description=None):
+    def __init__(self, name, description, status, project_id):
         self.name = name
         self.description = description
+        self.status = status
+        self.project_id = project_id
 
     def __repr__(self):
         return f"<Task {self.name}>"

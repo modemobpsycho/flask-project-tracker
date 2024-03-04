@@ -7,7 +7,8 @@ from website.projects.forms import (
     EditProjectForm,
     ManageMembersForm,
 )
-from website.projects.models import Project
+from website.projects.models import Project, Task
+from website.tasks.forms import TaskForm
 
 projects_bp = Blueprint("projects", __name__)
 
@@ -43,7 +44,9 @@ def project_details(project_id):
         return redirect(url_for("projects.projects"))
 
     form = CreateProjectForm()
-    return render_template("projects/project_details.html", project=project, form=form)
+    return render_template(
+        "projects/project_details.html", project=project, form=form, tasks=project.tasks
+    )
 
 
 @projects_bp.route("/projects/<int:project_id>/edit", methods=["GET", "POST"])
@@ -81,3 +84,22 @@ def delete_project(project_id):
 
     flash("Project deleted successfully", "success")
     return redirect(url_for("projects.projects"))
+
+
+@projects_bp.route("/project/<int:project_id>/create_task", methods=["GET", "POST"])
+def create_task(project_id):
+    project = Project.query.get_or_404(project_id)
+    form = TaskForm()
+
+    if form.validate_on_submit():
+        task = Task(
+            name=form.name.data,
+            description=form.description.data,
+            status=form.status.data,
+            project_id=project_id,
+        )
+        db.session.add(task)
+        db.session.commit()
+        return redirect(url_for("projects.project_details", project_id=project_id))
+
+    return render_template("tasks/create_task.html", form=form, project=project)
