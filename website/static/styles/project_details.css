@@ -2,6 +2,8 @@
 
 .card {
     margin-top: 20px;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .card-header {
@@ -10,6 +12,7 @@
 
 .card-title {
     color: #1e1e1e;
+    font-size: 36px;
 }
 
 .project-name {
@@ -19,6 +22,8 @@
 
 .project-description {
     margin-bottom: 20px;
+    height: 40px;
+    overflow-y: auto;
 }
 
 .list-group {
@@ -29,6 +34,7 @@
     padding: 20px;
     margin-bottom: 10px;
     background-color: #f8f9fa;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .task-details {
@@ -43,8 +49,32 @@
 
 .task-actions {
     margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .btn {
     margin-right: 10px;
+    margin-left: 10px;
+    padding: 5px 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.img-avatar {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin: 20px auto;
+    box-shadow: 0 0 10px rgba(73, 61, 61, 0.5);
+    border: 2px solid rgba(0, 0, 0, 0.5);
+    padding: 5px;
+    color: white;
+    display: block;
+    margin: 0 auto;
 }

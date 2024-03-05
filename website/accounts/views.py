@@ -29,7 +29,7 @@ accounts_bp = Blueprint("accounts", __name__)
 @logout_required
 def register():
     form = RegisterForm(request.form)
-    if form.validate_on_submit():
+    if form.validate():
         user = User(email=form.email.data, password=form.password.data)
 
         db.session.add(user)

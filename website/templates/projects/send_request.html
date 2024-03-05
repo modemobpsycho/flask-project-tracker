@@ -1,0 +1,38 @@
+<!-- website/templates/projects/send_request.html -->
+{% extends "_base.html" %} {% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card mt-5">
+                <div class="card-header">
+                    <h1 class="card-title text-center">Send Join Request</h1>
+                </div>
+                <div class="card-body">
+                    <form
+                        method="POST"
+                        action="{{ url_for('projects.send_request', project_id=project_id) }}"
+                    >
+                        {{ form.hidden_tag() }}
+                        <div class="form-group">
+                            {{ form.message.label(class="form-control-label") }}
+                            {{ form.message(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.role.label(class="form-control-label") }} {{
+                            form.role(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                            {{
+                            form.sender_type.label(class="form-control-label")
+                            }} {{ form.sender_type(class="form-control") }}
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            Send Request
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

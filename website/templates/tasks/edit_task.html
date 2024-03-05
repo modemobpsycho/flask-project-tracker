@@ -1,38 +1,51 @@
+<!-- website/templates/tasks/edit_task.html -->
 {% extends "_base.html" %} {% block css %}
 <link
     rel="stylesheet"
-    href="{{ url_for('static', filename='styles/create_task.css') }}"
+    href="{{ url_for('static', filename='styles/card_form.css') }}"
 />
 {% endblock %} {% block content %}
 <div class="container">
-    <h1 class="mb-4">Edit Task</h1>
-    <form
-        method="POST"
-        action="{{ url_for('tasks.edit_task', task_id=task.id) }}"
-    >
-        {{ form.hidden_tag() }}
-        <div class="form-group">
-            <label for="name" class="form-label">Task Name</label>
-            {{ form.name(class="form-control") }} {% for error in
-            form.name.errors %}
-            <span class="text-danger">{{ error }}</span>
-            {% endfor %}
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card mt-5">
+                <div class="card-header">
+                    <h1 class="card-title text-center">Edit Task</h1>
+                </div>
+                <div class="card-body">
+                    <form
+                        method="POST"
+                        action="{{ url_for('tasks.edit_task', task_id=task.id) }}"
+                    >
+                        {{ form.hidden_tag() }}
+                        <div class="form-group">
+                            <label for="name">Task Name</label>
+                            {{ form.name(class="form-control") }} {% for error
+                            in form.name.errors %}
+                            <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Task Description</label>
+                            {{ form.description(class="form-control") }} {% for
+                            error in form.description.errors %}
+                            <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="form-group">
+                            <label for="status">Task Status</label>
+                            {{ form.status(class="form-control") }} {% for error
+                            in form.status.errors %}
+                            <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">
+                            Save
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="description" class="form-label">Task Description</label>
-            {{ form.description(class="form-control") }} {% for error in
-            form.description.errors %}
-            <span class="text-danger">{{ error }}</span>
-            {% endfor %}
-        </div>
-        <div class="form-group">
-            <label for="status" class="form-label">Task Status</label>
-            {{ form.status(class="form-control") }} {% for error in
-            form.status.errors %}
-            <span class="text-danger">{{ error }}</span>
-            {% endfor %}
-        </div>
-        <button type="submit" class="btn btn-primary">Save</button>
-    </form>
+    </div>
 </div>
 {% endblock %}
