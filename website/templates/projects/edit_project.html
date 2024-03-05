@@ -1,33 +1,51 @@
+<!-- website/templates/projects/edit_project.html -->
 {% extends "_base.html" %} {% block css %}
 <link
     rel="stylesheet"
-    href="{{ url_for('static', filename='styles/edit_project.css') }}"
+    href="{{ url_for('static', filename='styles/card_form.css') }}"
 />
 {% endblock %} {% block content %}
 <div class="container">
-    <h1 class="mb-4">Edit Project</h1>
-    <form
-        method="POST"
-        action="{{ url_for('projects.edit_project', project_id=project.id) }}"
-    >
-        {{ form.hidden_tag() }}
-        <div class="form-group">
-            <label for="name" class="form-label">Project Name</label>
-            {{ form.name(class="form-control") }} {% for error in
-            form.name.errors %}
-            <span class="text-danger">{{ error }}</span>
-            {% endfor %}
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card mt-5">
+                <div class="card-header">
+                    <h1 class="card-title text-center">Edit Project</h1>
+                </div>
+                <div class="card-body">
+                    <form
+                        method="POST"
+                        action="{{ url_for('projects.edit_project', project_id=project.id) }}"
+                    >
+                        {{ form.hidden_tag() }}
+                        <div class="form-group">
+                            <label for="name">Project Name</label>
+                            {{ form.name(class="form-control") }} {% for error
+                            in form.name.errors %}
+                            <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Project Description</label>
+                            {{ form.description(class="form-control") }} {% for
+                            error in form.description.errors %}
+                            <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="form-group">
+                            <label for="visibility">Project Visibility</label>
+                            {{ form.visibility(class="form-control") }} {% for
+                            error in form.visibility.errors %}
+                            <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">
+                            Update
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="description" class="form-label"
-                >Project Description</label
-            >
-            {{ form.description(class="form-control") }} {% for error in
-            form.description.errors %}
-            <span class="text-danger">{{ error }}</span>
-            {% endfor %}
-        </div>
-        <button type="submit" class="btn btn-primary">Update</button>
-    </form>
+    </div>
 </div>
 {% endblock %}

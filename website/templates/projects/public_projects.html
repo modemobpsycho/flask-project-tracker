@@ -5,9 +5,9 @@
 />
 {% endblock %} {% block content %}
 <div class="container">
-    <h1 class="mb-4">My Projects</h1>
+    <h1 class="mb-4">Open Projects</h1>
     <div class="row">
-        {% for project in projects %}
+        {% for project in public_projects %}
         <div class="col-md-4">
             <div class="card mb-4">
                 <div class="card-body">
@@ -29,10 +29,5 @@
         </div>
         {% endfor %}
     </div>
-    <a
-        href="{{ url_for('projects.create_project') }}"
-        class="btn btn-primary mt-4"
-        >Create New Project</a
-    >
 </div>
 {% endblock %}
