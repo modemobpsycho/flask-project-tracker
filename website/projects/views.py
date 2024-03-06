@@ -166,7 +166,6 @@ def join_requests():
     outgoing_requests = []
     incoming_requests = []
 
-    # Получаем все запросы пользователя
     all_requests = JoinRequest.query.filter(
         or_(
             JoinRequest.sender_id == current_user.id,
@@ -211,17 +210,13 @@ def send_request(project_id):
 
     form = SendJoinRequestForm()
     if form.validate_on_submit():
-        # Определяем отправителя запроса
         sender_id = current_user.id
 
-        # Если запрос отправлен создателем проекта, устанавливаем user_id в ID текущего пользователя
-        # И sender_id в ID создателя проекта
         if current_user.id != project.creator_id:
             sender_id = project.creator_id
 
         request = JoinRequest(
-            user_id=current_user.id,  # Здесь user_id будет либо ID текущего пользователя (если запрос отправлен создателем),
-            # либо ID пользователя, отправившего запрос (если запрос отправлен другим пользователем)
+            user_id=current_user.id,
             project_id=project_id,
             sender_id=sender_id,
             message=form.message.data,
@@ -250,23 +245,18 @@ def accept_join_request(request_id):
         flash("Project not found", "danger")
         return redirect(url_for("projects.join_requests"))
 
-    # Проверяем sender_type, чтобы определить, был ли запрос отправлен текущим пользователем или создателем проекта
     if request.sender_type == "user":
-        # Если запрос отправлен текущим пользователем, то устанавливаем его user_id как отправителя
         sender_id = current_user.id
     else:
-        # Если запрос отправлен создателем проекта, то устанавливаем его sender_id как отправителя
         sender_id = request.sender_id
 
-    # Создаем нового участника проекта
     project_member = ProjectMember(
-        user_id=request.user_id,  # Используем user_id из запроса
+        user_id=request.user_id,
         project_id=request.project_id,
         role=request.role,
     )
     db.session.add(project_member)
 
-    # Удаляем запрос на присоединение
     db.session.delete(request)
     db.session.commit()
 
@@ -282,7 +272,6 @@ def reject_join_request(request_id):
         flash("Request not found", "danger")
         return redirect(url_for("projects.join_requests"))
 
-    # Удаляем запрос на присоединение
     db.session.delete(request)
     db.session.commit()
 
@@ -322,7 +311,7 @@ def remove_member_from_project(project_id, member_id):
 def invite_member(project_id):
     project = Project.query.get_or_404(project_id)
     if current_user.id != project.creator_id:
-        abort(403)  # Forbidden
+        abort(403)
 
     invite_form = InviteMemberForm(request.form)
     if invite_form.validate_on_submit():
@@ -332,8 +321,8 @@ def invite_member(project_id):
             join_request = JoinRequest(
                 project_id=project.id,
                 user_id=user.id,
-                sender_id=current_user.id,  # Устанавливаем sender_id в идентификатор текущего пользователя (приглашающего)
-                sender_type="creator",  # Устанавливаем тип отправителя как "creator"
+                sender_id=current_user.id,
+                sender_type="creator",
                 role="Member",
             )
             db.session.add(join_request)
