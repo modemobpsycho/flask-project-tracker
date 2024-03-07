@@ -1,4 +1,3 @@
-<!-- website/templates/projects/projects_requests.html -->
 {% extends "_base.html" %} {% block content %}
 <div class="container">
     <h1 class="mb-4">Join Requests</h1>
@@ -7,12 +6,13 @@
         <div class="col-md-6">
             <h2>Outgoing Requests</h2>
             <ul class="list-group">
-                {% for request in incoming_requests %}
+                {% for request in outgoing_requests %}
                 <li class="list-group-item">
                     <strong>Project:</strong> {{ request.project.name }} <br />
                     <strong>Status:</strong> {{ request.status }} <br />
                     <strong>Role:</strong> {{ request.role }} <br />
                     <strong>Type:</strong> Outgoing <br />
+                    <strong>User_id:</strong> {{ request.user_id}}</strong>
                 </li>
                 {% endfor %}
             </ul>
@@ -20,13 +20,12 @@
         <div class="col-md-6">
             <h2>Incoming Requests</h2>
             <ul class="list-group">
-                {% for request in outgoing_requests %}
+                {% for request in incoming_requests %}
                 <li class="list-group-item">
                     <strong>Project:</strong> {{ request.project.name }} <br />
                     <strong>Status:</strong> {{ request.status }} <br />
                     <strong>Role:</strong> {{ request.role }} <br />
                     <strong>Type:</strong> Incoming <br />
-                    {% if request.status == "pending" %}
                     <form
                         method="POST"
                         action="{{ url_for('projects.accept_join_request', request_id=request.id) }}"
@@ -65,7 +64,6 @@
                             Reject
                         </button>
                     </form>
-                    {% endif %}
                 </li>
                 {% endfor %}
             </ul>

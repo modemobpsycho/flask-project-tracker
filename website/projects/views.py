@@ -173,20 +173,17 @@ def join_requests():
         )
     ).all()
 
-    project_ids = set(request.project_id for request in all_requests)
-    projects = {
-        project.id: project
-        for project in Project.query.filter(Project.id.in_(project_ids)).all()
-    }
-
     for request in all_requests:
-        if (
-            request.sender_id == current_user.id
-            or request.sender_id == projects[request.project_id].creator_id
-        ):
-            outgoing_requests.append(request)
-        else:
-            incoming_requests.append(request)
+        if request.sender_type == "creator":
+            if request.sender_id == current_user.id:
+                outgoing_requests.append(request)
+            else:
+                incoming_requests.append(request)
+        elif request.sender_type == "user":
+            if request.user_id == current_user.id:
+                incoming_requests.append(request)
+            else:
+                outgoing_requests.append(request)
 
     accept_form = AcceptRequestForm()
     reject_form = RejectRequestForm()
@@ -204,21 +201,19 @@ def join_requests():
 @login_required
 def send_request(project_id):
     project = Project.query.get(project_id)
+    creator_id = project.creator_id
     if project is None:
         flash("Project not found", "danger")
         return redirect(url_for("projects.projects"))
 
     form = SendJoinRequestForm()
     if form.validate_on_submit():
-        sender_id = current_user.id
-
-        if current_user.id != project.creator_id:
-            sender_id = project.creator_id
-
+        sender_type = "user"
         request = JoinRequest(
-            user_id=current_user.id,
+            user_id=creator_id,
             project_id=project_id,
-            sender_id=sender_id,
+            sender_id=current_user.id,
+            sender_type=sender_type,
             message=form.message.data,
             role=form.role.data,
         )
@@ -245,13 +240,15 @@ def accept_join_request(request_id):
         flash("Project not found", "danger")
         return redirect(url_for("projects.join_requests"))
 
-    if request.sender_type == "user":
-        sender_id = current_user.id
+    if request.sender_type == "creator":
+        sender_id = project.creator_id
+        user_id = request.user_id
     else:
-        sender_id = request.sender_id
+        sender_id = request.user_id
+        user_id = request.sender_id
 
     project_member = ProjectMember(
-        user_id=request.user_id,
+        user_id=user_id,
         project_id=request.project_id,
         role=request.role,
     )
