@@ -93,7 +93,7 @@ class JoinRequest(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     project_id = db.Column(db.Integer, db.ForeignKey("projects.id"), nullable=False)
     sender_id = db.Column(db.Integer, nullable=False)
-    sender_type = db.Column(db.String, nullable=False)  # Добавляем поле sender_type
+    sender_type = db.Column(db.String, nullable=False)
     status = db.Column(db.String, default="pending")
     role = db.Column(db.String)
     message = db.Column(db.String)

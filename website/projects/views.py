@@ -166,7 +166,6 @@ def join_requests():
     outgoing_requests = []
     incoming_requests = []
 
-    # Получаем все запросы пользователя
     all_requests = JoinRequest.query.filter(
         or_(
             JoinRequest.sender_id == current_user.id,
@@ -174,20 +173,17 @@ def join_requests():
         )
     ).all()
 
-    project_ids = set(request.project_id for request in all_requests)
-    projects = {
-        project.id: project
-        for project in Project.query.filter(Project.id.in_(project_ids)).all()
-    }
-
     for request in all_requests:
-        if (
-            request.sender_id == current_user.id
-            or request.sender_id == projects[request.project_id].creator_id
-        ):
-            outgoing_requests.append(request)
-        else:
-            incoming_requests.append(request)
+        if request.sender_type == "creator":
+            if request.sender_id == current_user.id:
+                outgoing_requests.append(request)
+            else:
+                incoming_requests.append(request)
+        elif request.sender_type == "user":
+            if request.user_id == current_user.id:
+                incoming_requests.append(request)
+            else:
+                outgoing_requests.append(request)
 
     accept_form = AcceptRequestForm()
     reject_form = RejectRequestForm()
@@ -205,25 +201,19 @@ def join_requests():
 @login_required
 def send_request(project_id):
     project = Project.query.get(project_id)
+    creator_id = project.creator_id
     if project is None:
         flash("Project not found", "danger")
         return redirect(url_for("projects.projects"))
 
     form = SendJoinRequestForm()
     if form.validate_on_submit():
-        # Определяем отправителя запроса
-        sender_id = current_user.id
-
-        # Если запрос отправлен создателем проекта, устанавливаем user_id в ID текущего пользователя
-        # И sender_id в ID создателя проекта
-        if current_user.id != project.creator_id:
-            sender_id = project.creator_id
-
+        sender_type = "user"
         request = JoinRequest(
-            user_id=current_user.id,  # Здесь user_id будет либо ID текущего пользователя (если запрос отправлен создателем),
-            # либо ID пользователя, отправившего запрос (если запрос отправлен другим пользователем)
+            user_id=creator_id,
             project_id=project_id,
-            sender_id=sender_id,
+            sender_id=current_user.id,
+            sender_type=sender_type,
             message=form.message.data,
             role=form.role.data,
         )
@@ -250,23 +240,20 @@ def accept_join_request(request_id):
         flash("Project not found", "danger")
         return redirect(url_for("projects.join_requests"))
 
-    # Проверяем sender_type, чтобы определить, был ли запрос отправлен текущим пользователем или создателем проекта
-    if request.sender_type == "user":
-        # Если запрос отправлен текущим пользователем, то устанавливаем его user_id как отправителя
-        sender_id = current_user.id
+    if request.sender_type == "creator":
+        sender_id = project.creator_id
+        user_id = request.user_id
     else:
-        # Если запрос отправлен создателем проекта, то устанавливаем его sender_id как отправителя
-        sender_id = request.sender_id
+        sender_id = request.user_id
+        user_id = request.sender_id
 
-    # Создаем нового участника проекта
     project_member = ProjectMember(
-        user_id=request.user_id,  # Используем user_id из запроса
+        user_id=user_id,
         project_id=request.project_id,
         role=request.role,
     )
     db.session.add(project_member)
 
-    # Удаляем запрос на присоединение
     db.session.delete(request)
     db.session.commit()
 
@@ -282,7 +269,6 @@ def reject_join_request(request_id):
         flash("Request not found", "danger")
         return redirect(url_for("projects.join_requests"))
 
-    # Удаляем запрос на присоединение
     db.session.delete(request)
     db.session.commit()
 
@@ -322,7 +308,7 @@ def remove_member_from_project(project_id, member_id):
 def invite_member(project_id):
     project = Project.query.get_or_404(project_id)
     if current_user.id != project.creator_id:
-        abort(403)  # Forbidden
+        abort(403)
 
     invite_form = InviteMemberForm(request.form)
     if invite_form.validate_on_submit():
@@ -332,8 +318,8 @@ def invite_member(project_id):
             join_request = JoinRequest(
                 project_id=project.id,
                 user_id=user.id,
-                sender_id=current_user.id,  # Устанавливаем sender_id в идентификатор текущего пользователя (приглашающего)
-                sender_type="creator",  # Устанавливаем тип отправителя как "creator"
+                sender_id=current_user.id,
+                sender_type="creator",
                 role="Member",
             )
             db.session.add(join_request)

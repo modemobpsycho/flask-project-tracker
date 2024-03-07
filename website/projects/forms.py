@@ -64,14 +64,10 @@ class RemoveProjectMemberForm(FlaskForm):
 
 
 class SendJoinRequestForm(FlaskForm):
+    user_id = IntegerField("User ID")
     message = StringField("Message", validators=[DataRequired()])
     role = StringField("Role", validators=[DataRequired()])
-    sender_id = IntegerField("Sender ID")  # Добавляем новое поле sender_id
-    sender_type = SelectField(
-        "Sender Type",
-        choices=[("user", "User")],
-        validators=[DataRequired()],
-    )
+    sender_id = IntegerField("Sender ID")
     submit = SubmitField("Send Request")
 
 
@@ -85,5 +81,4 @@ class RejectRequestForm(FlaskForm):
 
 class InviteMemberForm(FlaskForm):
     email = StringField("Email", validators=[DataRequired(), Email()])
-    sender_id = IntegerField("Sender ID")  # Добавляем новое поле sender_id
     submit = SubmitField("Invite")
