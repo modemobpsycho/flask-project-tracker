@@ -148,7 +148,7 @@
                         </li>
                         {% endfor %}
                     </ul>
-                    {% if not is_owner %}
+                    {% if not is_owner and not is_member %}
                     <div class="mt-3">
                         <form
                             id="join_request_form"

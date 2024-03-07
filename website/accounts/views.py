@@ -157,10 +157,28 @@ def edit_profile():
         form.populate_obj(profile)
         if form.profile_photo.data:
             filename = secure_filename(form.profile_photo.data.filename)
+            file_extension = os.path.splitext(filename)[1]
+
+            counter = 0
+            new_filename = filename
+            while os.path.exists(
+                os.path.join(current_app.config["UPLOAD_FOLDER"], new_filename)
+            ):
+                counter += 1
+                new_filename = (
+                    f"{os.path.splitext(filename)[0]}_{counter}{file_extension}"
+                )
+            if profile.photo:
+                previous_photo_path = os.path.join(
+                    current_app.config["UPLOAD_FOLDER"], profile.photo
+                )
+                if os.path.exists(previous_photo_path):
+                    os.remove(previous_photo_path)
+
             form.profile_photo.data.save(
-                os.path.join(current_app.config["UPLOAD_FOLDER"], filename)
+                os.path.join(current_app.config["UPLOAD_FOLDER"], new_filename)
             )
-            profile.photo = filename
+            profile.photo = new_filename
 
         db.session.commit()
         flash("Profile updated successfully", "success")

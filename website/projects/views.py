@@ -76,6 +76,7 @@ def project_details(project_id):
     project_creator = User.query.get(project.creator_id)
 
     project_members = ProjectMember.query.filter_by(project_id=project_id).all()
+    is_member = any(member.user_id == current_user.id for member in project_members)
     members_info = []
     for member in project_members:
         member_profile = Profile.query.filter_by(user_id=member.user_id).first()
@@ -96,6 +97,7 @@ def project_details(project_id):
         send_request_form=send_request_form,
         project_members=members_info,
         invite_member_form=invite_member_form,
+        is_member=is_member,
     )
 
 
@@ -314,19 +316,25 @@ def invite_member(project_id):
     if invite_form.validate_on_submit():
         email = invite_form.email.data
         user = User.query.filter_by(email=email).first()
-        if user:
-            join_request = JoinRequest(
-                project_id=project.id,
-                user_id=user.id,
-                sender_id=current_user.id,
-                sender_type="creator",
-                role="Member",
-            )
-            db.session.add(join_request)
-            db.session.commit()
-            flash(f"User {user.email} has been invited to the project.", "success")
+        project_member = ProjectMember.query.filter_by(
+            user_id=user.id, project_id=project_id
+        ).first()
+        if not project_member:
+            if user:
+                join_request = JoinRequest(
+                    project_id=project.id,
+                    user_id=user.id,
+                    sender_id=current_user.id,
+                    sender_type="creator",
+                    role="Member",
+                )
+                db.session.add(join_request)
+                db.session.commit()
+                flash(f"User {user.email} has been invited to the project.", "success")
+            else:
+                flash(f"No user found with email {email}.", "danger")
         else:
-            flash(f"No user found with email {email}.", "danger")
+            flash(f"This user {email} already exists in project members")
     else:
         flash_errors(invite_form)
 
