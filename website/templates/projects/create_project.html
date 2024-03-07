@@ -1,3 +1,4 @@
+<!-- website/templates/projects/create_project.html -->
 {% extends "_base.html" %} {% block content %}
 <div class="container">
     <div class="row justify-content-center">
@@ -24,6 +25,16 @@
                                 >Description:</label
                             >
                             {{ form.description(class="form-control",
+                            id="description") }} {% for error in
+                            form.description.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        <div class="mb-3">
+                            <label for="visibility" class="form-label"
+                                >visibility:</label
+                            >
+                            {{ form.visibility(class="form-control",
                             id="description") }} {% for error in
                             form.description.errors %}
                             <div class="text-danger">{{ error }}</div>

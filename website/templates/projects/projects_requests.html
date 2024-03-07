@@ -1,0 +1,73 @@
+{% extends "_base.html" %} {% block content %}
+<div class="container">
+    <h1 class="mb-4">Join Requests</h1>
+
+    <div class="row">
+        <div class="col-md-6">
+            <h2>Outgoing Requests</h2>
+            <ul class="list-group">
+                {% for request in outgoing_requests %}
+                <li class="list-group-item">
+                    <strong>Project:</strong> {{ request.project.name }} <br />
+                    <strong>Status:</strong> {{ request.status }} <br />
+                    <strong>Role:</strong> {{ request.role }} <br />
+                    <strong>Type:</strong> Outgoing <br />
+                    <strong>User_id:</strong> {{ request.user_id}}</strong>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <h2>Incoming Requests</h2>
+            <ul class="list-group">
+                {% for request in incoming_requests %}
+                <li class="list-group-item">
+                    <strong>Project:</strong> {{ request.project.name }} <br />
+                    <strong>Status:</strong> {{ request.status }} <br />
+                    <strong>Role:</strong> {{ request.role }} <br />
+                    <strong>Type:</strong> Incoming <br />
+                    <form
+                        method="POST"
+                        action="{{ url_for('projects.accept_join_request', request_id=request.id) }}"
+                    >
+                        {{ accept_form.csrf_token }}
+                        <input
+                            type="hidden"
+                            name="sender_id"
+                            value="{{ request.sender_id }}"
+                        />
+                        <input
+                            type="hidden"
+                            name="sender_type"
+                            value="{{ request.sender_type }}"
+                        />
+                        <button type="submit" class="btn btn-success">
+                            Accept
+                        </button>
+                    </form>
+                    <form
+                        method="POST"
+                        action="{{ url_for('projects.reject_join_request', request_id=request.id) }}"
+                    >
+                        {{ reject_form.csrf_token }}
+                        <input
+                            type="hidden"
+                            name="sender_id"
+                            value="{{ request.sender_id }}"
+                        />
+                        <input
+                            type="hidden"
+                            name="sender_type"
+                            value="{{ request.sender_type }}"
+                        />
+                        <button type="submit" class="btn btn-danger">
+                            Reject
+                        </button>
+                    </form>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
