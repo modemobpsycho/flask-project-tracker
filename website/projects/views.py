@@ -315,12 +315,18 @@ def invite_member(project_id):
     invite_form = InviteMemberForm(request.form)
     if invite_form.validate_on_submit():
         email = invite_form.email.data
-        user = User.query.filter_by(email=email).first()
-        project_member = ProjectMember.query.filter_by(
-            user_id=user.id, project_id=project_id
-        ).first()
-        if not project_member:
-            if user:
+        user_exists = db.session.query(
+            User.query.filter_by(email=email).exists()
+        ).scalar()
+        if user_exists:
+            user = User.query.filter_by(email=email).first()
+            project_member = ProjectMember.query.filter_by(
+                user_id=user.id, project_id=project_id
+            ).first()
+            join_request = JoinRequest.query.filter_by(
+                user_id=user.id, project_id=project.id
+            ).first()
+            if project_member is None and join_request is None:
                 join_request = JoinRequest(
                     project_id=project.id,
                     user_id=user.id,
@@ -332,9 +338,9 @@ def invite_member(project_id):
                 db.session.commit()
                 flash(f"User {user.email} has been invited to the project.", "success")
             else:
-                flash(f"No user found with email {email}.", "danger")
+                flash(f"This user {email} already exists in project members", "danger")
         else:
-            flash(f"This user {email} already exists in project members")
+            flash(f"No user found with email {email}.", "danger")
     else:
         flash_errors(invite_form)
 
