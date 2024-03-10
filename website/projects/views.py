@@ -28,8 +28,20 @@ projects_bp = Blueprint("projects", __name__)
 @projects_bp.route("/projects")
 @login_required
 def projects():
-    user_projects = Project.query.filter_by(creator_id=current_user.id).all()
-    return render_template("projects/projects.html", projects=user_projects)
+    user_created_projects = Project.query.filter_by(creator_id=current_user.id).all()
+    user_member_projects = (
+        Project.query.join(Project.members)
+        .filter(
+            ProjectMember.user_id == current_user.id,
+            ProjectMember.user_id != Project.creator_id,
+        )
+        .all()
+    )
+    return render_template(
+        "projects/projects.html",
+        created_projects=user_created_projects,
+        member_projects=user_member_projects,
+    )
 
 
 @projects_bp.route("/projects/create", methods=["GET", "POST"])
@@ -37,13 +49,31 @@ def projects():
 def create_project():
     form = CreateProjectForm()
     if form.validate_on_submit():
+        existing_project = Project.query.filter_by(
+            creator_id=current_user.id,
+            name=form.name.data,
+        ).first()
+
+        if existing_project:
+            flash("You already have a project with this name", "danger")
+            return redirect(url_for("projects.create_project"))
+
         project = Project(
             name=form.name.data,
             description=form.description.data,
-            creator_id=form.creator_id.data,
+            creator_id=current_user.id,
             visibility=form.visibility.data,
         )
         db.session.add(project)
+        db.session.commit()
+
+        role = "creator"
+        project_member = ProjectMember(
+            user_id=current_user.id,
+            project_id=project.id,
+            role=role,
+        )
+        db.session.add(project_member)
         db.session.commit()
 
         flash("Project created successfully", "success")
@@ -207,22 +237,29 @@ def send_request(project_id):
     if project is None:
         flash("Project not found", "danger")
         return redirect(url_for("projects.projects"))
-
+    user = User.query.get(current_user.id)
+    join_request = JoinRequest.query.filter_by(
+        sender_id=current_user.id, project_id=project.id
+    ).first()
     form = SendJoinRequestForm()
     if form.validate_on_submit():
-        sender_type = "user"
-        request = JoinRequest(
-            user_id=creator_id,
-            project_id=project_id,
-            sender_id=current_user.id,
-            sender_type=sender_type,
-            message=form.message.data,
-            role=form.role.data,
-        )
-        db.session.add(request)
-        db.session.commit()
-        flash("Join request sent successfully", "success")
-        return redirect(url_for("projects.project_details", project_id=project_id))
+        if join_request is None:
+            sender_type = "user"
+            request = JoinRequest(
+                user_id=creator_id,
+                project_id=project_id,
+                sender_id=current_user.id,
+                sender_type=sender_type,
+                message=form.message.data,
+                role=form.role.data,
+            )
+            db.session.add(request)
+            db.session.commit()
+            flash("Join request sent successfully", "success")
+            return redirect(url_for("projects.project_details", project_id=project_id))
+        else:
+            flash(f"You have already sent a join request to {project.name}", "danger")
+            return redirect(url_for("projects.project_details", project_id=project_id))
 
     return render_template(
         "projects/send_request.html", form=form, project_id=project_id
@@ -326,7 +363,8 @@ def invite_member(project_id):
             join_request = JoinRequest.query.filter_by(
                 user_id=user.id, project_id=project.id
             ).first()
-            if project_member is None and join_request is None:
+            is_creator = current_user.id == project.creator_id
+            if project_member is None and join_request is None and not is_creator:
                 join_request = JoinRequest(
                     project_id=project.id,
                     user_id=user.id,
@@ -342,6 +380,6 @@ def invite_member(project_id):
         else:
             flash(f"No user found with email {email}.", "danger")
     else:
-        flash_errors(invite_form)
+        flash(f"Smth wrong", "danger")
 
     return redirect(url_for("projects.project_details", project_id=project.id))

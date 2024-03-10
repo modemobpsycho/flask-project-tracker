@@ -45,3 +45,11 @@
 .project-link:hover {
     color: #0056b3;
 }
+
+.created-project {
+    border: 2px solid rgb(0, 187, 0);
+}
+
+.member-project {
+    border: 2px solid rgb(181, 0, 0);
+}

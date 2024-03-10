@@ -18,7 +18,9 @@ class User(UserMixin, db.Model):
     is_confirmed = db.Column(db.Boolean, nullable=False, default=False)
     confirmed_on = db.Column(db.DateTime, nullable=True)
 
-    profile = db.relationship("Profile", uselist=False, backref="user")
+    profile = db.relationship(
+        "Profile", uselist=False, backref="user", cascade="all, delete-orphan"
+    )
 
     def __init__(
         self,
