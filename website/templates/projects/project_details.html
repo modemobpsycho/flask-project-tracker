@@ -93,21 +93,6 @@
                     {% endif %}
                     <h2>Project Members:</h2>
                     <ul class="list-group">
-                        <li class="list-group-item">
-                            <div class="project-member">
-                                <div class="member-info">
-                                    <img
-                                        src="{{ url_for('static', filename='upload_folder/' + creator.photo if creator.photo else 'upload_folder/default_photo.jpg') }}"
-                                        alt="Owner Avatar"
-                                        class="img-avatar"
-                                    />
-                                    <span class="member-name"
-                                        >{{ project_creator.email }}
-                                        (Owner)</span
-                                    >
-                                </div>
-                            </div>
-                        </li>
                         {% for member in project_members %}
                         <li class="list-group-item">
                             <div class="project-member">
@@ -148,7 +133,7 @@
                         </li>
                         {% endfor %}
                     </ul>
-                    {% if not is_owner %}
+                    {% if not is_owner and not is_member %}
                     <div class="mt-3">
                         <form
                             id="join_request_form"
