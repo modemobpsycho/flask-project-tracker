@@ -1,5 +1,10 @@
 <!-- website/templates/navigation.html -->
-<header class="p-3 text-bg-dark">
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='styles/navigation.css') }}"
+/>
+
+<header class="p-3">
     <div class="container">
         <div
             class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start"
@@ -8,37 +13,35 @@
                 class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0"
             >
                 <li>
-                    <a
-                        href="{{ url_for('core.home') }}"
-                        class="nav-link px-2 text-secondary"
+                    <a href="{{ url_for('core.home') }}" class="nav-link px-2"
                         >Home</a
                     >
                 </li>
                 <li>
                     <a
                         href="{{ url_for('projects.projects') }}"
-                        class="nav-link px-2 text-secondary"
+                        class="nav-link px-2"
                         >My Projects</a
                     >
                 </li>
                 <li>
                     <a
                         href="{{ url_for('projects.public_projects') }}"
-                        class="nav-link px-2 text-secondary"
+                        class="nav-link px-2"
                         >Open projects</a
                     >
                 </li>
                 <li>
                     <a
                         href="{{ url_for('projects.join_requests') }}"
-                        class="nav-link px-2 text-secondary"
+                        class="nav-link px-2"
                         >Requests</a
                     >
                 </li>
                 <li>
                     <a
                         href="{{ url_for('accounts.profile') }}"
-                        class="nav-link px-2 text-secondary"
+                        class="nav-link px-2"
                         >Profile</a
                     >
                 </li>

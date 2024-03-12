@@ -33,27 +33,11 @@ h1 {
     color: #fff;
     cursor: pointer;
     margin: 0 auto;
-}
-
-.btn-danger {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    border: none;
-    border-radius: 5px;
-    background-color: #e20000;
-    color: #fff;
-    cursor: pointer;
-    margin: 0 auto;
+    margin-bottom: 20px;
 }
 
 .btn-primary:hover {
     background-color: #00438b;
-}
-
-.btn-danger:hover {
-    background-color: #600000;
 }
 
 .img-avatar {
@@ -63,14 +47,41 @@ h1 {
     border-radius: 50%;
     margin-top: 20px;
     margin-bottom: 20px;
-    margin-left: 20px;
-    margin-right: 20px;
+    margin-left: auto;
+    margin-right: auto;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     border: 2px solid rgba(0, 0, 0, 0.5);
     padding: 5px;
     color: white;
     display: flex;
 }
+
 #delete-photo-btn {
     margin-top: 10px;
+}
+
+.btn-delete {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: #e40000;
+    color: #fff;
+    cursor: pointer;
+    margin: 0 auto;
+}
+
+.btn-delete:hover {
+    background-color: #b30000;
+}
+
+#delete-photo-form {
+    position: fixed;
+    top: 86.8%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    width: 100%;
 }
