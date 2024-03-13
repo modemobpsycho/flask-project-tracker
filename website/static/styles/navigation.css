@@ -1,0 +1,67 @@
+/* website/static/styles/navigation.css */
+
+header {
+    background-color: #262928;
+    padding: 10px 0;
+}
+
+.container {
+    margin: 0 auto;
+}
+
+.nav {
+    padding: 0;
+    margin: 0;
+}
+
+.nav li {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: #e6e6e6;
+    font-weight: bold;
+    font-size: 18px;
+    transition: color 0.5s ease;
+}
+
+.nav-link:hover {
+    color: #9a9a9a;
+}
+
+.btn {
+    margin: 0 5px;
+}
+
+.btn-danger {
+    background-color: #e32d3f;
+    border-color: #dc3545;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+.btn-outline-light {
+    color: #f8f9fa;
+    border-color: #f8f9fa;
+}
+
+.btn-outline-light:hover {
+    background-color: #f8f9fa;
+    color: #212529;
+    border-color: #f8f9fa;
+}

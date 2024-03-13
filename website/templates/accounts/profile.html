@@ -22,19 +22,11 @@
             <p class="profile-info">Age: {{ profile.age }}</p>
             <p class="bio">Bio: {{ profile.bio }}</p>
 
-            {% if profile.full_name %}
             <a
                 href="{{ url_for('accounts.edit_profile') }}"
                 class="btn btn-primary btn-edit"
                 >Edit Profile</a
             >
-            {% else %}
-            <a
-                href="{{ url_for('accounts.create_profile') }}"
-                class="btn btn-primary btn-create-profile"
-                >Create Profile</a
-            >
-            {% endif %}
         </div>
     </div>
 </div>

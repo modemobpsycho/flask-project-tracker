@@ -35,6 +35,14 @@ def register():
         db.session.add(user)
         db.session.commit()
 
+        default_photo = "default_photo.jpg"
+        profile = Profile(
+            user_id=user.id, full_name="", age=None, bio="", photo=default_photo
+        )
+
+        db.session.add(profile)
+        db.session.commit()
+
         token = generate_token(user.email)
         confirm_url = url_for("accounts.confirm_email", token=token, _external=True)
         html = render_template("accounts/confirm_email.html", confirm_url=confirm_url)
@@ -168,17 +176,19 @@ def edit_profile():
                 new_filename = (
                     f"{os.path.splitext(filename)[0]}_{counter}{file_extension}"
                 )
-            if profile.photo:
-                previous_photo_path = os.path.join(
-                    current_app.config["UPLOAD_FOLDER"], profile.photo
-                )
-                if os.path.exists(previous_photo_path):
-                    os.remove(previous_photo_path)
 
-            form.profile_photo.data.save(
-                os.path.join(current_app.config["UPLOAD_FOLDER"], new_filename)
-            )
-            profile.photo = new_filename
+            if new_filename != "default_photo.jpg":
+                if profile.photo != "default_photo.jpg":
+                    previous_photo_path = os.path.join(
+                        current_app.config["UPLOAD_FOLDER"], profile.photo
+                    )
+                    if os.path.exists(previous_photo_path):
+                        os.remove(previous_photo_path)
+
+                form.profile_photo.data.save(
+                    os.path.join(current_app.config["UPLOAD_FOLDER"], new_filename)
+                )
+                profile.photo = new_filename
 
         db.session.commit()
         flash("Profile updated successfully", "success")
@@ -191,12 +201,15 @@ def edit_profile():
 @login_required
 def delete_profile_photo():
     if current_user.profile.photo:
-        os.remove(
-            os.path.join(
-                current_app.config["UPLOAD_FOLDER"], current_user.profile.photo
+        if current_user.profile.photo != "default_photo.jpg":
+            os.remove(
+                os.path.join(
+                    current_app.config["UPLOAD_FOLDER"], current_user.profile.photo
+                )
             )
-        )
-        current_user.profile.photo = None
-        db.session.commit()
-        flash("Profile photo deleted successfully", "success")
+            current_user.profile.photo = None
+            db.session.commit()
+            flash("Profile photo deleted successfully", "success")
+        else:
+            flash("Cannot delete default profile photo", "warning")
     return redirect(url_for("accounts.edit_profile"))

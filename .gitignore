@@ -102,3 +102,4 @@ dmypy.json
 .pytype/
 
 cython_debug/
+fix.txt
