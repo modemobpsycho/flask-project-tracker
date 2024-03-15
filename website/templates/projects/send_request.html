@@ -10,21 +10,23 @@
                 <div class="card-body">
                     <form
                         method="POST"
-                        action="{{ url_for('projects.send_request', project_id=project_id, user_id=current_user.id) }}"
+                        action="{{ url_for('projects.send_request', project_id=project_id) }}"
                     >
                         {{ form.hidden_tag() }}
                         <div class="form-group">
                             {{ form.message.label(class="form-control-label") }}
-                            {{ form.message(class="form-control") }}
+                            {{ form.message(class="form-control",
+                            placeholder="Enter your message") }} {% for error in
+                            form.message.errors %}
+                            <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
                         </div>
                         <div class="form-group">
                             {{ form.role.label(class="form-control-label") }} {{
-                            form.role(class="form-control") }}
-                        </div>
-                        <div class="form-group">
-                            {{
-                            form.sender_type.label(class="form-control-label")
-                            }} {{ form.sender_type(class="form-control") }}
+                            form.role(class="form-control", placeholder="Enter
+                            the role") }} {% for error in form.role.errors %}
+                            <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
                         </div>
                         <button type="submit" class="btn btn-primary">
                             Send Request
