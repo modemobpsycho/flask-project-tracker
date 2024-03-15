@@ -11,6 +11,7 @@ class Config(object):
     TESTING = False
     CSRF_ENABLED = True
     SECRET_KEY = config("SECRET_KEY", default=os.getenv("SECRET_KEY"))
+    DATABASE_URL = config("DATABASE_URL", default=os.getenv("DATABASE_URL"))
     SQLALCHEMY_DATABASE_URI = config(
         "SQLALCHEMY_DATABASE_URI", default=os.getenv("SQLALCHEMY_DATABASE_URI")
     )
@@ -42,7 +43,8 @@ class DevelopmentConfig(Config):
 class TestingConfig(Config):
     TESTING = True
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = "sqlite:///testproject.db"
+    DATABASE_URL = "sqlite:///test.db"
+    SQLALCHEMY_DATABASE_URI = "sqlite:///test.db"
     BCRYPT_LOG_ROUNDS = 1
     WTF_CSRF_ENABLED = False
 

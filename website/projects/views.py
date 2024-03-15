@@ -232,17 +232,20 @@ def join_requests():
 @projects_bp.route("/send_request/<int:project_id>", methods=["GET", "POST"])
 @login_required
 def send_request(project_id):
-    project = Project.query.get(project_id)
+    project = Project.query.get_or_404(project_id)
     creator_id = project.creator_id
+
     if project is None:
         flash("Project not found", "danger")
         return redirect(url_for("projects.projects"))
-    user = User.query.get(current_user.id)
-    join_request = JoinRequest.query.filter_by(
-        sender_id=current_user.id, project_id=project.id
-    ).first()
+
     form = SendJoinRequestForm()
+
     if form.validate_on_submit():
+        join_request = JoinRequest.query.filter_by(
+            sender_id=current_user.id, project_id=project.id
+        ).first()
+
         if join_request is None:
             sender_type = "user"
             request = JoinRequest(
@@ -279,24 +282,28 @@ def accept_join_request(request_id):
         flash("Project not found", "danger")
         return redirect(url_for("projects.join_requests"))
 
-    if request.sender_type == "creator":
-        sender_id = project.creator_id
-        user_id = request.user_id
+    accept_form = AcceptRequestForm()
+    if accept_form.validate_on_submit():
+        if request.sender_type == "creator":
+            sender_id = project.creator_id
+            user_id = request.user_id
+        else:
+            sender_id = request.user_id
+            user_id = request.sender_id
+
+        project_member = ProjectMember(
+            user_id=user_id,
+            project_id=request.project_id,
+            role=accept_form.role.data,
+        )
+        db.session.add(project_member)
+        db.session.delete(request)
+        db.session.commit()
+
+        flash("Join request accepted successfully", "success")
     else:
-        sender_id = request.user_id
-        user_id = request.sender_id
+        flash("Validation error occurred", "danger")
 
-    project_member = ProjectMember(
-        user_id=user_id,
-        project_id=request.project_id,
-        role=request.role,
-    )
-    db.session.add(project_member)
-
-    db.session.delete(request)
-    db.session.commit()
-
-    flash("Join request accepted successfully", "success")
     return redirect(url_for("projects.join_requests"))
 
 
@@ -349,9 +356,10 @@ def invite_member(project_id):
     if current_user.id != project.creator_id:
         abort(403)
 
-    invite_form = InviteMemberForm(request.form)
+    invite_form = InviteMemberForm()
     if invite_form.validate_on_submit():
         email = invite_form.email.data
+        role = invite_form.role.data
         user_exists = db.session.query(
             User.query.filter_by(email=email).exists()
         ).scalar()
@@ -364,13 +372,13 @@ def invite_member(project_id):
                 user_id=user.id, project_id=project.id
             ).first()
             is_creator = current_user.id == project.creator_id
-            if project_member is None and join_request is None and not is_creator:
+            if project_member is None and join_request is None:
                 join_request = JoinRequest(
                     project_id=project.id,
                     user_id=user.id,
                     sender_id=current_user.id,
                     sender_type="creator",
-                    role="Member",
+                    role=role,
                 )
                 db.session.add(join_request)
                 db.session.commit()
@@ -380,6 +388,6 @@ def invite_member(project_id):
         else:
             flash(f"No user found with email {email}.", "danger")
     else:
-        flash(f"Smth wrong", "danger")
+        flash(f"Something wrong with the invitation form", "danger")
 
     return redirect(url_for("projects.project_details", project_id=project.id))
