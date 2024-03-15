@@ -54,7 +54,18 @@ class EditProjectForm(FlaskForm):
 
 class AddProjectMemberForm(FlaskForm):
     email = StringField("Email", validators=[DataRequired(), Email()])
-    role = StringField("Role")
+    role = SelectField(
+        "Role",
+        choices=[
+            ("Developer", "Developer"),
+            ("QA", "QA"),
+            ("Admin", "Admin"),
+            ("Project Manager", "Project Manager"),
+            ("UX/UI Designer", "UX/UI Designer"),
+            ("Other", "Other"),
+        ],
+        validators=[DataRequired()],
+    )
     submit = SubmitField("Add Member")
 
 
@@ -66,12 +77,35 @@ class RemoveProjectMemberForm(FlaskForm):
 class SendJoinRequestForm(FlaskForm):
     user_id = IntegerField("User ID")
     message = StringField("Message", validators=[DataRequired()])
-    role = StringField("Role", validators=[DataRequired()])
+    role = SelectField(
+        "Role",
+        choices=[
+            ("Developer", "Developer"),
+            ("QA", "QA"),
+            ("Admin", "Admin"),
+            ("Project Manager", "Project Manager"),
+            ("UX/UI Designer", "UX/UI Designer"),
+            ("Other", "Other"),
+        ],
+        validators=[DataRequired()],
+    )
     sender_id = IntegerField("Sender ID")
     submit = SubmitField("Send Request")
 
 
 class AcceptRequestForm(FlaskForm):
+    role = SelectField(
+        "Role",
+        choices=[
+            ("Developer", "Developer"),
+            ("QA", "QA"),
+            ("Admin", "Admin"),
+            ("Project Manager", "Project Manager"),
+            ("UX/UI Designer", "UX/UI Designer"),
+            ("Other", "Other"),
+        ],
+        validators=[DataRequired()],
+    )
     submit = SubmitField("Accept")
 
 
@@ -81,4 +115,16 @@ class RejectRequestForm(FlaskForm):
 
 class InviteMemberForm(FlaskForm):
     email = StringField("Email", validators=[DataRequired(), Email()])
+    role = SelectField(
+        "Role",
+        choices=[
+            ("Developer", "Developer"),
+            ("QA", "QA"),
+            ("Admin", "Admin"),
+            ("Project Manager", "Project Manager"),
+            ("UX/UI Designer", "UX/UI Designer"),
+            ("Other", "Other"),
+        ],
+        validators=[DataRequired()],
+    )
     submit = SubmitField("Invite")

@@ -26,5 +26,5 @@ class BaseTestCase(TestCase):
     def tearDown(self):
         db.session.remove()
         db.drop_all()
-        testdb_path = os.path.join("website/instance", "testproject.db")
+        testdb_path = os.path.join("website", "test.db")
         os.remove(testdb_path)
