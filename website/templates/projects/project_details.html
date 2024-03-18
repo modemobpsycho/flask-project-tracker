@@ -8,29 +8,38 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card">
+            <div class="card mt-4">
                 <div class="card-header">
-                    <h1 class="card-title text-center">Project Details</h1>
+                    <h1 class="card-title text-center">{{ project.name }}</h1>
                 </div>
                 <div class="card-body">
-                    <h3 class="project-name">{{ project.name }}</h3>
-                    <h3 class="project-name">
-                        Owner: {{ project_creator.email }}
-                    </h3>
-                    <h3 class="project-name">
-                        Visibility: {{ project.visibility }}
-                    </h3>
-                    <p class="project-description">{{ project.description }}</p>
+                    <div class="project-info">
+                        <p>
+                            <strong>Owner:</strong> {{ project_creator.email }}
+                        </p>
+                        <p>
+                            <strong>Visibility:</strong> {{ project.visibility
+                            }}
+                        </p>
+                        <p>
+                            <strong>Description:</strong> {{ project.description
+                            }}
+                        </p>
+                    </div>
                     <h2>Tasks:</h2>
                     <ul class="list-group">
                         {% for task in project.tasks %}
                         <li class="list-group-item">
                             <div class="task-details">
-                                <div class="task-name">{{ task.name }}</div>
-                                <div class="task-description">
-                                    {{ task.description }}
-                                </div>
-                                <div class="task-status">{{ task.status }}</div>
+                                <a
+                                    href="{{ url_for('projects.view_task_details', project_id=project.id, task_id=task.id) }}"
+                                    class="task-link"
+                                    >{{ task.name }}</a
+                                >
+                                <p><strong>For:</strong> {{ task.role }}</p>
+                                <p>
+                                    <strong>Status:</strong> {{ task.status }}
+                                </p>
                                 {% if can_edit %}
                                 <div class="task-actions">
                                     <a
@@ -91,7 +100,7 @@
                         >
                     </div>
                     {% endif %}
-                    <h2>Project Members:</h2>
+                    <h2 class="mt-4">Project Members:</h2>
                     <ul class="list-group">
                         {% for member in project_members %}
                         <li class="list-group-item">
@@ -103,18 +112,17 @@
                                         alt="Member Avatar"
                                         class="img-avatar"
                                     />
-                                    <span class="member-name"
-                                        >{{ member.user.email }}</span
-                                    >
-                                    {% else %}
-                                    <span class="member-name"
-                                        >{{ member.user.email }}</span
-                                    >
                                     {% endif %}
+                                    <span class="member-name"
+                                        >{{ member.user.email }}</span
+                                    >
                                 </div>
                                 <div class="member-role">
-                                    Role: {{ member.role }} {% if is_owner and
-                                    member.user.id != current_user.id %}
+                                    <p>
+                                        <strong>Role:</strong> {{ member.role }}
+                                    </p>
+                                    {% if is_owner and member.user.id !=
+                                    current_user.id %}
                                     <form
                                         method="POST"
                                         action="{{ url_for('projects.remove_member_from_project', project_id=project.id, member_id=member.user.id) }}"
@@ -133,7 +141,17 @@
                         </li>
                         {% endfor %}
                     </ul>
-                    {% if not is_owner and not is_member %}
+                    {% if is_member and not is_owner %}
+                    <form
+                        method="POST"
+                        action="{{ url_for('projects.leave_project', project_id=project.id) }}"
+                    >
+                        {{ send_request_form.hidden_tag() }}
+                        <button type="submit" class="btn btn-danger">
+                            Leave Project
+                        </button>
+                    </form>
+                    {% endif %} {% if not is_owner and not is_member %}
                     <div class="mt-3">
                         <form
                             id="join_request_form"
@@ -194,7 +212,7 @@
                                 <span class="text-danger">{{ error }}</span>
                                 {% endfor %}
                             </div>
-                            <button type="submit" class="btn btn-primary">
+                            <button type="submit" class="btn btn-primary mt-3">
                                 Invite
                             </button>
                         </form>

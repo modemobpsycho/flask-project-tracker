@@ -1,0 +1,64 @@
+<!-- website/templates/tasks/task_details.html -->
+{% extends "_base.html" %} {% block css %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='styles/task_details.css') }}"
+/>
+{% endblock %}{% block content %}
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h1 class="card-title">Task Details: {{ task.name }}</h1>
+        </div>
+        <div class="card-body">
+            <div class="task-info">
+                <p><strong>Description:</strong> {{ task.description }}</p>
+                <p><strong>For:</strong> {{ task.role }}</p>
+                <p><strong>Status:</strong> {{ task.status }}</p>
+            </div>
+            <h2>Comments:</h2>
+            <ul class="comments-list">
+                {% for comment_info in comments %}
+                <li class="comment">
+                    <div class="comment-info">
+                        <img
+                            src="{{ url_for('static', filename='upload_folder/' + comment_info.user.profile.photo) }}"
+                            alt="User Avatar"
+                            class="avatar"
+                        />
+                        <p class="comment-author">
+                            {{ comment_info.user.profile.full_name }}
+                        </p>
+                    </div>
+                    <div class="comment-text">
+                        {{ comment_info.comment.text }} {% if
+                        project_member.role == 'creator' %}
+                        <form
+                            action="{{ url_for('projects.delete_comment', comment_id=comment_info.comment.id) }}"
+                            method="POST"
+                            class="delete-comment-form"
+                        >
+                            {{ form.hidden_tag() }}
+                            <input
+                                type="hidden"
+                                name="_method"
+                                value="DELETE"
+                            />
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                Delete
+                            </button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+            <a
+                href="{{ url_for('projects.add_comment_to_task', project_id=project.id, task_id=task.id) }}"
+                class="btn btn-primary btn-add-comment"
+                >Add Comment</a
+            >
+        </div>
+    </div>
+</div>
+{% endblock %}
