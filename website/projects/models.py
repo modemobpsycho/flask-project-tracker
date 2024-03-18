@@ -39,12 +39,14 @@ class Task(db.Model):
     description = db.Column(db.String)
     created_on = db.Column(db.DateTime, nullable=False, default=datetime.now())
     status = db.Column(db.String, nullable=False, default="Pending")
+    role = db.Column(db.String, nullable=False)
     project_id = db.Column(db.Integer, db.ForeignKey("projects.id"), nullable=False)
 
-    def __init__(self, name, description, status, project_id):
+    def __init__(self, name, description, status, role, project_id):
         self.name = name
         self.description = description
         self.status = status
+        self.role = role
         self.project_id = project_id
 
     def __repr__(self):

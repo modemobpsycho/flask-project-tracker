@@ -1,0 +1,73 @@
+/* website/static/styles/task_details.css */
+
+.container {
+    margin-top: 20px;
+}
+
+.card {
+    border: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.card-title {
+    color: #1e1e1e;
+    font-size: 24px;
+    margin-bottom: 0;
+}
+
+.task-info p {
+    margin: 5px 0;
+}
+
+.comments-list {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.comment {
+    background-color: #f8f9fa;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.comment-text {
+    margin-bottom: 5px;
+    margin-left: 50px;
+}
+
+.btn-add-comment {
+    margin-top: 20px;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    object-fit: cover;
+}
+
+.comment-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.comment-author {
+    font-weight: bold;
+    margin-bottom: 0;
+}
+
+.delete-comment-form {
+    display: inline;
+}
+
+.delete-comment-form button {
+    margin-left: 10px;
+}

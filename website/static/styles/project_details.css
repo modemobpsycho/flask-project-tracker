@@ -42,11 +42,6 @@
     flex-direction: column;
 }
 
-.task-name {
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
 .task-actions {
     margin-top: 10px;
     display: flex;
@@ -55,13 +50,12 @@
 }
 
 .btn {
-    margin-top: 10px;
-    margin-right: 10px;
-    padding: 5px 10px;
+    margin: 0 5px;
+    padding: 8px 16px;
     font-size: 16px;
     border: none;
     border-radius: 5px;
-    color: #fff;
+    color: #ffffff;
     cursor: pointer;
 }
 
@@ -77,4 +71,17 @@
     color: white;
     display: block;
     margin: 0 auto;
+}
+
+.task-link {
+    font-weight: bold;
+    font-size: 20px;
+    margin-bottom: 5px;
+    text-decoration: none;
+    color: #0076d7;
+    transition: color 0.3s ease;
+}
+
+.task-link:hover {
+    color: #003c70;
 }

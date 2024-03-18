@@ -1,0 +1,29 @@
+<!-- website/templates/tasks/add_comment_to_task.html -->
+{% extends "_base.html" %} {% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card mt-5">
+                <div class="card-header">
+                    <h1 class="card-title text-center">Add Comment to Task</h1>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        {{ form.hidden_tag() }}
+                        <div class="form-group">
+                            <label for="text">Comment:</label>
+                            {{ form.text(class="form-control") }} {% for error
+                            in form.text.errors %}
+                            <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">
+                            Add Comment
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
