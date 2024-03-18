@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, request, url_for, flash
+from flask import Blueprint, render_template, redirect, request, url_for, flash, abort
 from flask_login import login_required, current_user
 from website import app, db
 from website.accounts.models import User, Profile
@@ -19,7 +19,7 @@ from website.projects.models import (
     ProjectMember,
     Comment,
 )
-from website.tasks.forms import TaskForm
+from website.tasks.forms import TaskForm, CommentForm, HiddenForm
 from sqlalchemy import or_
 
 projects_bp = Blueprint("projects", __name__)
@@ -131,6 +131,27 @@ def project_details(project_id):
     )
 
 
+@projects_bp.route("/projects/<int:project_id>/leave", methods=["POST"])
+@login_required
+def leave_project(project_id):
+    project = Project.query.get_or_404(project_id)
+    if project.creator_id == current_user.id:
+        flash("You cannot leave your own project.", "warning")
+        return redirect(url_for("projects.project_details", project_id=project_id))
+
+    member = ProjectMember.query.filter_by(
+        project_id=project_id, user_id=current_user.id
+    ).first()
+    if not member:
+        flash("You are not a member of this project.", "warning")
+        return redirect(url_for("projects.project_details", project_id=project_id))
+
+    db.session.delete(member)
+    db.session.commit()
+    flash("You have successfully left the project.", "success")
+    return redirect(url_for("projects.projects"))
+
+
 @projects_bp.route("/projects/<int:project_id>/edit", methods=["GET", "POST"])
 @login_required
 def edit_project(project_id):
@@ -175,6 +196,7 @@ def create_task(project_id):
             name=form.name.data,
             description=form.description.data,
             status=form.status.data,
+            role=form.role.data,
             project_id=project_id,
         )
         db.session.add(task)
@@ -391,3 +413,78 @@ def invite_member(project_id):
         flash(f"Something wrong with the invitation form", "danger")
 
     return redirect(url_for("projects.project_details", project_id=project.id))
+
+
+@projects_bp.route("/projects/<int:project_id>/tasks/<int:task_id>")
+@login_required
+def view_task_details(project_id, task_id):
+    task = Task.query.get_or_404(task_id)
+    project = Project.query.get_or_404(project_id)
+
+    project_member = ProjectMember.query.filter_by(
+        project_id=project_id, user_id=current_user.id
+    ).first()
+    if not project_member:
+        flash("You are not a member of this project", "danger")
+        return redirect(url_for("projects.projects"))
+
+    comments = Comment.query.filter_by(task_id=task_id).all()
+    comments_with_user_info = []
+
+    for comment in comments:
+        user = User.query.get(comment.user_id)
+        comments_with_user_info.append({"comment": comment, "user": user})
+
+    form = HiddenForm()
+
+    return render_template(
+        "tasks/task_details.html",
+        task=task,
+        project=project,
+        comments=comments_with_user_info,
+        form=form,
+        project_member=project_member,
+    )
+
+
+@projects_bp.route(
+    "/projects/<int:project_id>/tasks/<int:task_id>/add_comment",
+    methods=["GET", "POST"],
+)
+@login_required
+def add_comment_to_task(project_id, task_id):
+    task = Task.query.get_or_404(task_id)
+    project = Project.query.get_or_404(project_id)
+
+    form = CommentForm()
+    if form.validate_on_submit():
+        comment = Comment(text=form.text.data, user_id=current_user.id, task_id=task_id)
+        db.session.add(comment)
+        db.session.commit()
+        flash("Comment added successfully", "success")
+        return redirect(
+            url_for(
+                "projects.view_task_details", project_id=project_id, task_id=task_id
+            )
+        )
+
+    return render_template(
+        "tasks/add_comment_to_task.html", form=form, task=task, project=project
+    )
+
+
+@projects_bp.route("/comments/<int:comment_id>/delete", methods=["POST"])
+@login_required
+def delete_comment(comment_id):
+    comment = Comment.query.get_or_404(comment_id)
+    task = Task.query.get_or_404(comment.task_id)
+    project = Project.query.get_or_404(task.project_id)
+
+    if current_user.id != project.creator_id:
+        if current_user.id != comment.user_id:
+            abort(403)
+
+    db.session.delete(comment)
+    db.session.commit()
+    flash("Comment deleted successfully", "success")
+    return redirect(request.referrer)
