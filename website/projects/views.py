@@ -426,7 +426,7 @@ def view_task_details(project_id, task_id):
     ).first()
     if not project_member:
         flash("You are not a member of this project", "danger")
-        return redirect(url_for("projects.projects"))
+        return redirect(url_for("projects.project_details", project_id=project_id))
 
     comments = Comment.query.filter_by(task_id=task_id).all()
     comments_with_user_info = []
