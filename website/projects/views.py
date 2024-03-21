@@ -95,7 +95,14 @@ def project_details(project_id):
     can_view = is_public or is_creator
     can_edit = is_creator
 
-    if not can_view:
+    is_member = (
+        ProjectMember.query.filter_by(
+            project_id=project_id, user_id=current_user.id
+        ).first()
+        is not None
+    )
+
+    if not can_view and not is_member:
         flash("You are not allowed to view this project", "danger")
         return redirect(url_for("projects.projects"))
 
@@ -106,7 +113,6 @@ def project_details(project_id):
     project_creator = User.query.get(project.creator_id)
 
     project_members = ProjectMember.query.filter_by(project_id=project_id).all()
-    is_member = any(member.user_id == current_user.id for member in project_members)
     members_info = []
     for member in project_members:
         member_profile = Profile.query.filter_by(user_id=member.user_id).first()

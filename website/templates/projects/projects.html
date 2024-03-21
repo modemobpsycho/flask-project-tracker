@@ -5,55 +5,64 @@
 />
 {% endblock %} {% block content %}
 <div class="container">
-    <h1 class="mb-4">My Projects</h1>
-    <h2>Created Projects</h2>
     <div class="row">
-        {% for project in created_projects %}
-        <div class="col-md-4">
-            <div class="card mb-4 created-project">
+        <div class="col-md-6">
+            <div class="card mb-4 created-projects">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="card-title">Created Projects</h2>
+                </div>
                 <div class="card-body">
-                    <h5 class="card-title">{{ project.name }}</h5>
-                    <p class="card-text">{{ project.description }}</p>
-                    <div
-                        class="d-flex justify-content-between align-items-center"
-                    >
-                        <div class="btn-group">
+                    {% if created_projects %}
+                    <ul class="list-group list-group-flush">
+                        {% for project in created_projects %}
+                        <li class="list-group-item">
+                            <h5>{{ project.name }}</h5>
+                            <p>{{ project.description }}</p>
                             <a
                                 href="{{ url_for('projects.project_details', project_id=project.id) }}"
-                                class="btn btn-md btn-outline-primary"
+                                class="btn btn-sm btn-outline-primary"
                                 >View</a
                             >
-                        </div>
-                    </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p class="text-muted">
+                        You haven't created any projects yet.
+                    </p>
+                    {% endif %}
                 </div>
             </div>
         </div>
-        {% endfor %}
-    </div>
 
-    <h2>Member Projects</h2>
-    <div class="row">
-        {% for project in member_projects %}
-        <div class="col-md-4">
-            <div class="card mb-4 member-project">
+        <div class="col-md-6">
+            <div class="card mb-4 member-projects">
+                <div class="card-header bg-success text-white">
+                    <h2 class="card-title">Member Projects</h2>
+                </div>
                 <div class="card-body">
-                    <h5 class="card-title">{{ project.name }}</h5>
-                    <p class="card-text">{{ project.description }}</p>
-                    <div
-                        class="d-flex justify-content-between align-items-center"
-                    >
-                        <div class="btn-group">
+                    {% if member_projects %}
+                    <ul class="list-group list-group-flush">
+                        {% for project in member_projects %}
+                        <li class="list-group-item">
+                            <h5>{{ project.name }}</h5>
+                            <p>{{ project.description }}</p>
                             <a
                                 href="{{ url_for('projects.project_details', project_id=project.id) }}"
-                                class="btn btn-md btn-outline-primary"
+                                class="btn btn-sm btn-outline-success"
                                 >View</a
                             >
-                        </div>
-                    </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p class="text-muted">
+                        You are not a member of any projects.
+                    </p>
+                    {% endif %}
                 </div>
             </div>
         </div>
-        {% endfor %}
     </div>
 
     <a

@@ -2,29 +2,26 @@
 {% extends "_base.html" %} {% block css %}
 <link
     rel="stylesheet"
-    href="{{ url_for('static', filename='styles/projects.css') }}"
+    href="{{ url_for('static', filename='styles/public_projects.css') }}"
 />
 {% endblock %} {% block content %}
 <div class="container">
-    <h1 class="mb-4">Open Projects</h1>
+    <h1 class="mb-4 text-center">Explore Open Projects</h1>
     <div class="row">
         {% for project in public_projects %}
         <div class="col-md-4">
-            <div class="card mb-4">
+            <div class="card mb-4 project-card">
                 <div class="card-body">
                     <h5 class="card-title">{{ project.name }}</h5>
                     <p class="card-text">{{ project.description }}</p>
-                    <div
-                        class="d-flex justify-content-between align-items-center"
+                </div>
+                <div class="card-footer">
+                    <a
+                        href="{{ url_for('projects.project_details', project_id=project.id) }}"
+                        class="btn btn-primary btn-block"
                     >
-                        <div class="btn-group">
-                            <a
-                                href="{{ url_for('projects.project_details', project_id=project.id) }}"
-                                class="btn btn-md btn-outline-primary"
-                                >View</a
-                            >
-                        </div>
-                    </div>
+                        <i class="fas fa-eye"></i> View Project
+                    </a>
                 </div>
             </div>
         </div>
