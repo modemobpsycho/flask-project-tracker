@@ -34,6 +34,7 @@ class Config(object):
 
 
 class DevelopmentConfig(Config):
+    APP_SETTINGS = "config.DevelopmentConfig"
     DEVELOPMENT = True
     DEBUG = True
     WTF_CSRF_ENABLED = True
@@ -41,6 +42,7 @@ class DevelopmentConfig(Config):
 
 
 class TestingConfig(Config):
+    APP_SETTINGS = "config.TestingConfig"
     TESTING = True
     DEBUG = True
     DATABASE_URL = "sqlite:///test.db"

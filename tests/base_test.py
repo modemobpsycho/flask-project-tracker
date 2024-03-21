@@ -1,30 +1,41 @@
 import os
+import unittest
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
 
-from flask_testing import TestCase
-
-from website import app, db
+from config import TestingConfig
 from website.accounts.models import User
 
 
-class BaseTestCase(TestCase):
-    def create_app(self):
-        app.config.from_object("config.TestingConfig")
-        return app
-
+class BaseTestCase(unittest.TestCase):
     def setUp(self):
-        db.create_all()
+        self.app = Flask(__name__)
+        self.app.config.from_object(TestingConfig)
+
+        self.db = SQLAlchemy(self.app)
+
+        self.db.create_all()
+
         unconfirmed_user = User(
             email="unconfirmeduser@gmail.com", password="unconfirmeduser"
         )
-        db.session.add(unconfirmed_user)
         confirmed_user = User(
             email="confirmeduser@gmail.com", password="confirmeduser", is_confirmed=True
         )
-        db.session.add(confirmed_user)
-        db.session.commit()
+
+        self.db.session.add(unconfirmed_user)
+        self.db.session.add(confirmed_user)
+        self.db.session.commit()
 
     def tearDown(self):
-        db.session.remove()
-        db.drop_all()
-        testdb_path = os.path.join("website", "test.db")
-        os.remove(testdb_path)
+        # self.db.session.remove()
+
+        # self.db.drop_all()
+
+        # testdb_path = os.path.join("website", "test.db")
+        # if os.path.exists(testdb_path):
+        #     os.remove(testdb_path)
+
+
+if __name__ == "__main__":
+    unittest.main()

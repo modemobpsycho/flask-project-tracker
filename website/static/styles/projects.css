@@ -2,54 +2,110 @@
 
 .card {
     transition: box-shadow 0.3s ease;
-    box-shadow: 0 1px 3px #9b9b9b;
-    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+    border-radius: 10px;
+    border: none;
+    background-color: #fff;
 }
 
 .card:hover {
-    box-shadow: 0 4px 10px #4d4d4d;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
 .card-body {
-    padding: 20px;
+    padding: 5px;
 }
 
 .card-title {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: bold;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    color: #333;
 }
 
 .card-text {
     font-size: 16px;
-    margin-bottom: 15px;
-    height: 140px;
-    overflow-y: auto;
+    margin-bottom: 20px;
+    color: #555;
 }
 
 .btn-group {
     margin-top: auto;
 }
 
-.card-footer {
-    padding: 10px 20px;
-    background-color: #f8f9fa;
-    border-top: 1px solid #dee2e6;
+.card-header {
+    padding: 15px 20px;
+    border-bottom: 1px solid #ddd;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
 }
 
-.project-link {
+.card-header h2 {
+    margin-bottom: 0;
+    font-size: 22px;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.list-group-item {
+    padding: 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+.list-group-item:last-child {
+    border-bottom: none;
+}
+
+.list-group-item h5 {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+    overflow-y: auto;
+    height: 25px;
+    max-height: 25px;
+}
+
+.list-group-item p {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 15px;
+    overflow-y: auto;
+    max-height: 70px;
+}
+
+.btn-outline-primary {
     color: #007bff;
-    text-decoration: none;
+    border-color: #007bff;
 }
 
-.project-link:hover {
+.btn-outline-primary:hover {
     color: #0056b3;
+    background-color: #f2f8ff;
+    border-color: #0056b3;
 }
 
-.created-project {
-    border: 2px solid rgb(0, 187, 0);
+.btn-outline-success {
+    color: #28a745;
+    border-color: #28a745;
 }
 
-.member-project {
-    border: 2px solid rgb(181, 0, 0);
+.btn-outline-success:hover {
+    color: #19692c;
+    background-color: #e6f2e4;
+    border-color: #19692c;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+.btn-primary i {
+    margin-right: 5px;
 }

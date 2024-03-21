@@ -1,3 +1,30 @@
-.wrapper_request {
+/* website/static/styles/project_requests.css */
+
+.requests-section {
+    margin-bottom: 30px;
+}
+
+.request-details p {
+    margin-bottom: 10px;
+}
+
+.request-actions {
     display: flex;
+    align-items: center;
+}
+
+.outgoing-text {
+    color: #888;
+    font-style: italic;
+    margin-bottom: 0;
+}
+
+.no-requests {
+    color: #888;
+    font-style: italic;
+}
+
+.btn-success,
+.btn-danger {
+    margin-right: 5px;
 }
