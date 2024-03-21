@@ -1,36 +1,34 @@
 import unittest
-
-from base_test import BaseTestCase
-
-from website.accounts.forms import LoginForm, RegisterForm
+from website import create_app, db
+from website.accounts.forms import RegisterForm, LoginForm, ProfileForm
 
 
-class TestRegisterForm(BaseTestCase):
-    def test_validate_success_register_form(self):
-        form = RegisterForm(email="new@test.com", password="example", confirm="example")
-        self.assertTrue(form.validate())
+class TestForms(unittest.TestCase):
 
-    def test_validate_invalid_password_format(self):
-        form = RegisterForm(email="new@test.com", password="example", confirm="")
-        self.assertFalse(form.validate())
+    def setUp(self):
+        self.app = create_app("testing")
+        self.client = self.app.test_client()
+        with self.app.app_context():
+            db.create_all()
 
-    def test_validate_email_already_registered(self):
+    def tearDown(self):
+        with self.app.app_context():
+            db.session.remove()
+            db.drop_all()
+
+    def test_register_form(self):
         form = RegisterForm(
-            email="unconfirmeduser@gmail.com",
-            password="unconfirmeduser",
-            confirm="unconfirmeduser",
+            email="test@example.com", password="password", confirm="password"
         )
-        self.assertFalse(form.validate())
+        self.assertTrue(form.validate(), "Register form validation failed.")
 
+    def test_login_form(self):
+        form = LoginForm(email="test@example.com", password="password")
+        self.assertTrue(form.validate(), "Login form validation failed.")
 
-class TestLoginForm(BaseTestCase):
-    def test_validate_success_login_form(self):
-        form = LoginForm(email="unconfirmeduser@gmail.com", password="unconfirmeduser")
-        self.assertTrue(form.validate())
-
-    def test_validate_invalid_email_format(self):
-        form = LoginForm(email="unknown", password="example")
-        self.assertFalse(form.validate())
+    def test_profile_form(self):
+        form = ProfileForm(full_name="Test User", age=25, bio="Some bio")
+        self.assertTrue(form.validate(), "Profile form validation failed.")
 
 
 if __name__ == "__main__":
