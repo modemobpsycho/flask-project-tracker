@@ -1,4 +1,14 @@
-/* static/styles/edit_project.css */
+/* static/styles/accounts/create_profile.css */
+
+form {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+h1 {
+    text-align: center;
+    margin-top: 30px;
+}
 
 .form-group {
     margin-bottom: 20px;
@@ -9,16 +19,13 @@
     padding: 10px;
     font-size: 16px;
     border-radius: 5px;
-    border: 1px solid #ced4da;
-}
-
-.text-danger {
-    color: #dc3545;
-    font-size: 14px;
+    border: 1px solid #ccc;
 }
 
 .btn-primary {
-    padding: 10px 20px;
+    display: block;
+    width: 100%;
+    padding: 10px;
     font-size: 16px;
     border: none;
     border-radius: 5px;
