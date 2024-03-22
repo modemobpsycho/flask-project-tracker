@@ -1,0 +1,21 @@
+test_config (test_config.TestConfig.test_config) ... ok
+test_development_config (test_config.TestConfig.test_development_config) ... ok
+test_production_config (test_config.TestConfig.test_production_config) ... ok
+test_accept_request_form (test_forms.TestForms.test_accept_request_form) ... ok
+test_add_project_member_form (test_forms.TestForms.test_add_project_member_form) ... ok
+test_add_task_form (test_forms.TestForms.test_add_task_form) ... ok
+test_create_project_form (test_forms.TestForms.test_create_project_form) ... ok
+test_invite_member_form (test_forms.TestForms.test_invite_member_form) ... ok
+test_login_form (test_forms.TestForms.test_login_form) ... ok
+test_manage_members_form (test_forms.TestForms.test_manage_members_form) ... ok
+test_profile_form (test_forms.TestForms.test_profile_form) ... ok
+test_reject_request_form (test_forms.TestForms.test_reject_request_form) ... ok
+test_remove_project_member_form (test_forms.TestForms.test_remove_project_member_form) ... ok
+test_send_join_request_form (test_forms.TestForms.test_send_join_request_form) ... ok
+test_login_route_get (test_routes.TestLogin.test_login_route_get) ... ok
+test_login_route_post (test_routes.TestLogin.test_login_route_post) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 0.190s
+
+OK

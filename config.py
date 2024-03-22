@@ -8,6 +8,7 @@ load_dotenv(os.path.join(basedir, ".env"))
 
 class Config(object):
     FLASK_ENV = "base"
+    APP_SETTINGS = "config.DevelopmentConfig"
     DEBUG = False
     TESTING = False
     CSRF_ENABLED = True
