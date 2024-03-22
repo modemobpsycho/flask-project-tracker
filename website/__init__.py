@@ -9,7 +9,7 @@ from flask_wtf import FlaskForm
 from flask_wtf.csrf import CSRFProtect
 
 app = Flask(__name__)
-app.config.from_object(config("APP_SETTINGS"))
+app.config.from_object(config("APP_SETTINGS", default="config.DevelopmentConfig"))
 csrf = CSRFProtect(app)
 
 login_manager = LoginManager()
