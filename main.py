@@ -14,7 +14,9 @@ app = FlaskGroup(app)
 @app.command("test")
 def test():
     tests = unittest.TestLoader().discover("tests")
-    result = unittest.TextTestRunner(verbosity=2).run(tests)
+    with open("log_test.txt", "w") as f:
+        runner = unittest.TextTestRunner(stream=f, verbosity=2)
+        result = runner.run(tests)
     if result.wasSuccessful():
         return 0
     else:

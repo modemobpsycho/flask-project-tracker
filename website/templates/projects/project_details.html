@@ -61,6 +61,41 @@
         </div>
         <div class="col-md-9">
             <h1 class="project-name">{{ project.name }}</h1>
+            {% if is_owner %}
+            <div class="mt-4">
+                <a
+                    href="{{ url_for('projects.create_task', project_id=project.id) }}"
+                    class="btn btn-success"
+                    >Add Task</a
+                >
+                <a
+                    href="{{ url_for('projects.edit_project', project_id=project.id) }}"
+                    class="btn btn-primary"
+                    >Edit Project</a
+                >
+                <form
+                    method="POST"
+                    action="{{ url_for('projects.delete_project', project_id=project.id) }}"
+                    style="display: inline-block"
+                >
+                    {{ form.hidden_tag() }}
+                    <input type="hidden" name="_method" value="DELETE" />
+                    <button type="submit" class="btn btn-danger">
+                        Delete Project
+                    </button>
+                </form>
+            </div>
+            {% endif %} {% if is_member and not is_owner %}
+            <form
+                method="POST"
+                action="{{ url_for('projects.leave_project', project_id=project.id) }}"
+            >
+                {{ send_request_form.hidden_tag() }}
+                <button type="submit" class="btn btn-danger mt-4">
+                    Leave Project
+                </button>
+            </form>
+            {% endif %}
             <h2 class="mt-4">Tasks</h2>
             <ul class="list-group">
                 {% for task in project.tasks %}
@@ -104,41 +139,7 @@
                 </li>
                 {% endfor %}
             </ul>
-            {% if is_owner %}
-            <div class="mt-4">
-                <a
-                    href="{{ url_for('projects.create_task', project_id=project.id) }}"
-                    class="btn btn-success"
-                    >Add Task</a
-                >
-                <a
-                    href="{{ url_for('projects.edit_project', project_id=project.id) }}"
-                    class="btn btn-primary"
-                    >Edit Project</a
-                >
-                <form
-                    method="POST"
-                    action="{{ url_for('projects.delete_project', project_id=project.id) }}"
-                    style="display: inline-block"
-                >
-                    {{ form.hidden_tag() }}
-                    <input type="hidden" name="_method" value="DELETE" />
-                    <button type="submit" class="btn btn-danger">
-                        Delete Project
-                    </button>
-                </form>
-            </div>
-            {% endif %} {% if is_member and not is_owner %}
-            <form
-                method="POST"
-                action="{{ url_for('projects.leave_project', project_id=project.id) }}"
-            >
-                {{ send_request_form.hidden_tag() }}
-                <button type="submit" class="btn btn-danger mt-4">
-                    Leave Project
-                </button>
-            </form>
-            {% endif %} {% if not is_owner and not is_member %}
+            {% if not is_owner and not is_member %}
             <div class="mt-4">
                 <form
                     id="join_request_form"
