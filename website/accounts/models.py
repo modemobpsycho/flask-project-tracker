@@ -53,8 +53,9 @@ class Profile(db.Model):
     bio = db.Column(db.Text)
     photo = db.Column(db.String)
 
-    def __init__(self, user_id, full_name, age, bio):
+    def __init__(self, user_id, full_name, age, bio, photo):
         self.user_id = user_id
         self.full_name = full_name
         self.age = age
         self.bio = bio
+        self.photo = photo

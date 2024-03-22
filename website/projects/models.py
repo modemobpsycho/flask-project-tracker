@@ -42,6 +42,8 @@ class Task(db.Model):
     role = db.Column(db.String, nullable=False)
     project_id = db.Column(db.Integer, db.ForeignKey("projects.id"), nullable=False)
 
+    comments = relationship("Comment", cascade="all, delete-orphan")
+
     def __init__(self, name, description, status, role, project_id):
         self.name = name
         self.description = description
