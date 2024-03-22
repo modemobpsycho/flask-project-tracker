@@ -37,7 +37,11 @@ def register():
 
         default_photo = "default_photo.jpg"
         profile = Profile(
-            user_id=user.id, full_name="", age=None, bio="", photo=default_photo
+            user_id=user.id,
+            full_name="User User",
+            age=None,
+            bio="",
+            photo=default_photo,
         )
 
         db.session.add(profile)
