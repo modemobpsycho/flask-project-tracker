@@ -7,6 +7,7 @@ load_dotenv(os.path.join(basedir, ".env"))
 
 
 class Config(object):
+    FLASK_ENV = "base"
     DEBUG = False
     TESTING = False
     CSRF_ENABLED = True
@@ -34,6 +35,7 @@ class Config(object):
 
 
 class DevelopmentConfig(Config):
+    FLASK_ENV = "development"
     APP_SETTINGS = "config.DevelopmentConfig"
     DEVELOPMENT = True
     DEBUG = True
@@ -42,15 +44,17 @@ class DevelopmentConfig(Config):
 
 
 class TestingConfig(Config):
+    FLASK_ENV = "testing"
     APP_SETTINGS = "config.TestingConfig"
     TESTING = True
     DEBUG = True
-    DATABASE_URL = "sqlite:///test.db"
-    SQLALCHEMY_DATABASE_URI = "sqlite:///test.db"
+    SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
     BCRYPT_LOG_ROUNDS = 1
     WTF_CSRF_ENABLED = False
 
 
 class ProductionConfig(Config):
+    FLASK_ENV = "production"
+    APP_SETTINGS = "config.ProductionConfig"
     DEBUG = False
     DEBUG_TB_ENABLED = False
