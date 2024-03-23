@@ -39,4 +39,5 @@ jobs:
                   export SQLALCHEMY_DATABASE_URI=${{ secrets.SQLALCHEMY_DATABASE_URI }}
                   export FLASK_APP=${{ secrets.FLASK_APP }}
                   export SECRET_KEY=${{ secrets.SECRET_KEY }}
+                  export APP_SETTINGS=${{ secrets.APP_SETTINGS }}
                   python -m unittest discover -s tests -t .
