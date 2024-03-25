@@ -31,7 +31,7 @@ pyScss==1.4.0
 python-decouple==3.8
 python-dotenv==1.0.1
 six==1.16.0
-SQLAlchemy==2.0.27
+SQLAlchemy==2.0.29
 toml==0.10.2
 typing_extensions==4.10.0
 Werkzeug==3.0.1

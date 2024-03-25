@@ -1,4 +1,5 @@
-from flask.cli import FlaskGroup
+import os
+from flask import Flask
 
 from website import app, db
 from website.accounts.models import User
@@ -6,12 +7,13 @@ from website.accounts.models import User
 import unittest
 import getpass
 from datetime import datetime
+from dotenv import load_dotenv
+
+basedir = os.path.abspath(os.path.dirname(__file__))
+load_dotenv(os.path.join(basedir, ".env"))
 
 
-app = FlaskGroup(app)
-
-
-@app.command("test")
+@app.cli.command("test")
 def test():
     tests = unittest.TestLoader().discover("tests")
     with open("log_test.txt", "w") as f:
@@ -23,7 +25,7 @@ def test():
         return 1
 
 
-@app.command("create_admin")
+@app.cli.command("create_admin")
 def create_admin():
     email = input("Enter email address: ")
     password = getpass.getpass("Enter password: ")
@@ -48,4 +50,9 @@ def create_admin():
 
 
 if __name__ == "__main__":
-    app()
+    if os.getenv("FLASK_DOCKER") == "True":
+        print("DOCKER MODE")
+        app.run(host="0.0.0.0", port=5000)
+    else:
+        print("LOCAL MODE")
+        app.run()

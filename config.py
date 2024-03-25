@@ -31,6 +31,7 @@ class Config(object):
     MAIL_DEBUG = False
     MAIL_USERNAME = config("MAIL_USERNAME", default="MAIL_USERNAME")
     MAIL_PASSWORD = config("MAIL_PASSWORD", default="MAIL_PASSWORD")
+    FLASK_DOCKER = config("FLASK_DOCKER", default=os.getenv("FLASK_DOCKER"))
     UPLOAD_FOLDER = config("UPLOAD_FOLDER", default=os.getenv("UPLOAD_FOLDER"))
 
 
